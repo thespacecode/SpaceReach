@@ -5,6 +5,12 @@
 
     RewriteEngine On
 
+    # Block access to hidden files (.env, .git, .installed, etc.)
+    RewriteRule "(^|/)\." - [F]
+
+    # Block access to sensitive extension files (sqlite, log, sh, json, lock)
+    RewriteRule \.(sqlite|sqlite3|db|log|sh|env|json|lock|md)$ - [F,NC]
+
     # Handle Authorization Header
     RewriteCond %{HTTP:Authorization} .
     RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
@@ -22,4 +28,12 @@
     RewriteCond %{REQUEST_FILENAME} !-d
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteRule ^ index.php [L]
+</IfModule>
+
+# Security Headers Fallback for Apache
+<IfModule mod_headers.c>
+    Header always set X-Frame-Options "SAMEORIGIN"
+    Header always set X-Content-Type-Options "nosniff"
+    Header always set X-XSS-Protection "1; mode=block"
+    Header always set Referrer-Policy "strict-origin-when-cross-origin"
 </IfModule>

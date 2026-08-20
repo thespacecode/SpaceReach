@@ -33,12 +33,12 @@ use App\Http\Controllers\Api\GlobalSearchController;
 |--------------------------------------------------------------------------
 */
 
-// Installation Setup Wizard Routes
+// Installation Setup Wizard Routes (Rate limited for security)
 Route::prefix('install')->name('install.')->group(function () {
     Route::get('/', [\App\Http\Controllers\InstallController::class, 'index'])->name('index');
     Route::get('/check', [\App\Http\Controllers\InstallController::class, 'checkRequirements'])->name('check');
-    Route::post('/test-db', [\App\Http\Controllers\InstallController::class, 'testDatabase'])->name('test-db');
-    Route::post('/process', [\App\Http\Controllers\InstallController::class, 'process'])->name('process');
+    Route::post('/test-db', [\App\Http\Controllers\InstallController::class, 'testDatabase'])->middleware('throttle:5,1')->name('test-db');
+    Route::post('/process', [\App\Http\Controllers\InstallController::class, 'process'])->middleware('throttle:5,1')->name('process');
 });
 
 // Redirect root to login or dashboard
@@ -204,12 +204,12 @@ Route::middleware(['auth'])->group(function () {
 
 });
 
-// ── Public Routes ──
-Route::post('/forms/{slug}/submit', [FormController::class, 'submit'])->name('forms.submit');
+// ── Public Routes (Throttled) ──
+Route::post('/forms/{slug}/submit', [FormController::class, 'submit'])->middleware('throttle:10,1')->name('forms.submit');
 Route::get('/forms/{slug}/embed', [FormController::class, 'embed'])->name('forms.embed');
 
-// ── Chatbot API (public, for widget) ──
-Route::prefix('api/chatbot')->group(function () {
+// ── Chatbot API (public, rate limited to 30 req/min) ──
+Route::prefix('api/chatbot')->middleware('throttle:30,1')->group(function () {
     Route::post('/message', [ChatbotApiController::class, 'message'])->name('api.chatbot.message');
     Route::post('/start', [ChatbotApiController::class, 'startConversation'])->name('api.chatbot.start');
     Route::get('/settings', [ChatbotApiController::class, 'widgetSettings'])->name('api.chatbot.settings');

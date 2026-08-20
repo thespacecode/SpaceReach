@@ -16,8 +16,21 @@ use PDO;
 
 class InstallController extends Controller
 {
+    private function ensureNotInstalled()
+    {
+        $isInstalled = file_exists(storage_path('.installed')) || 
+                      file_exists(base_path('.installed')) || 
+                      (env('APP_INSTALLED', false) && !empty(env('APP_KEY')));
+
+        if ($isInstalled) {
+            abort(403, 'Portal is already installed. Setup wizard is locked for security.');
+        }
+    }
+
     public function index(Request $request): Response
     {
+        $this->ensureNotInstalled();
+
         $requirements = $this->getSystemRequirements();
         $permissions = $this->getPermissions();
 
@@ -30,6 +43,8 @@ class InstallController extends Controller
 
     public function checkRequirements(): JsonResponse
     {
+        $this->ensureNotInstalled();
+
         return response()->json([
             'requirements' => $this->getSystemRequirements(),
             'permissions' => $this->getPermissions(),
@@ -38,6 +53,8 @@ class InstallController extends Controller
 
     public function testDatabase(Request $request): JsonResponse
     {
+        $this->ensureNotInstalled();
+
         $request->validate([
             'db_driver' => 'required|in:mysql,pgsql,sqlite',
             'db_host' => 'required_unless:db_driver,sqlite',
@@ -89,6 +106,8 @@ class InstallController extends Controller
 
     public function process(Request $request): JsonResponse
     {
+        $this->ensureNotInstalled();
+
         $request->validate([
             'app_name' => 'required|string|max:255',
             'app_url' => 'required|url',
@@ -107,9 +126,9 @@ class InstallController extends Controller
         ]);
 
         try {
-            // 1. Write .env configuration file
+            // 1. Write .env configuration file securely
             $this->updateEnvFile([
-                'APP_NAME' => '"' . $request->input('app_name') . '"',
+                'APP_NAME' => '"' . str_replace('"', '\"', $request->input('app_name')) . '"',
                 'APP_ENV' => $request->input('app_env'),
                 'APP_DEBUG' => $request->input('app_debug') ? 'true' : 'false',
                 'APP_URL' => $request->input('app_url'),
@@ -272,14 +291,17 @@ class InstallController extends Controller
         $envContent = file_exists($envPath) ? file_get_contents($envPath) : '';
 
         foreach ($data as $key => $value) {
+            // Strip any newlines to prevent .env injection vulnerabilities
+            $cleanValue = str_replace(["\r", "\n"], '', $value);
             $pattern = "/^{$key}=.*/m";
             if (preg_match($pattern, $envContent)) {
-                $envContent = preg_replace($pattern, "{$key}={$value}", $envContent);
+                $envContent = preg_replace($pattern, "{$key}={$cleanValue}", $envContent);
             } else {
-                $envContent .= "\n{$key}={$value}";
+                $envContent .= "\n{$key}={$cleanValue}";
             }
         }
 
         file_put_contents($envPath, trim($envContent) . "\n");
+        @chmod($envPath, 0600);
     }
 }

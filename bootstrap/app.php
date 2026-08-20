@@ -14,8 +14,12 @@ return Application::configure(basePath: dirname(__DIR__))
     )
     ->withMiddleware(function (Middleware $middleware): void {
         $middleware->web(append: [
+            \App\Http\Middleware\SecurityHeadersMiddleware::class,
             \App\Http\Middleware\CheckInstallationMiddleware::class,
             \App\Http\Middleware\HandleInertiaRequests::class,
+        ]);
+        $middleware->api(append: [
+            \App\Http\Middleware\SecurityHeadersMiddleware::class,
         ]);
         $middleware->alias([
             'role' => \Spatie\Permission\Middleware\RoleMiddleware::class,

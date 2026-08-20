@@ -22,15 +22,6 @@ export default function Login({ status }) {
         post('/login');
     };
 
-    // Quick demo login filler
-    const handleQuickDemoLogin = (email, password) => {
-        setData(prev => ({
-            ...prev,
-            email,
-            password,
-        }));
-    };
-
     return (
         <>
             <Head title={`Sign In — ${companyName}`} />
@@ -163,42 +154,6 @@ export default function Login({ status }) {
                             )}
                         </Button>
                     </form>
-
-                    {/* Divider */}
-                    <div className="relative flex items-center justify-center pt-1">
-                        <div className="absolute inset-0 flex items-center">
-                            <div className="w-full border-t border-border/80" />
-                        </div>
-                        <span className="relative px-3 bg-card text-[11px] font-bold text-muted-foreground uppercase tracking-wider">
-                            Demo Login
-                        </span>
-                    </div>
-
-                    {/* Bottom Demo Login Section */}
-                    <div className="space-y-2">
-                        <p className="text-[11px] text-center text-muted-foreground font-medium">
-                            Quick-fill demo credentials to explore the platform:
-                        </p>
-                        <div className="grid grid-cols-2 gap-2">
-                            <button
-                                type="button"
-                                onClick={() => handleQuickDemoLogin('admin@thespacecode.com', 'Admin@123456')}
-                                className="w-full py-2 px-3 rounded-xl bg-indigo-50 hover:bg-indigo-100 dark:bg-indigo-950/60 dark:hover:bg-indigo-900/80 border border-indigo-200 dark:border-indigo-800 text-indigo-700 dark:text-indigo-300 font-bold text-xs flex items-center justify-center gap-1.5 transition-all cursor-pointer shadow-2xs"
-                            >
-                                <Sparkles className="w-3.5 h-3.5 text-indigo-500 shrink-0" />
-                                <span>Demo Admin</span>
-                            </button>
-
-                            <button
-                                type="button"
-                                onClick={() => handleQuickDemoLogin('sales@thespacecode.com', 'password')}
-                                className="w-full py-2 px-3 rounded-xl bg-emerald-50 hover:bg-emerald-100 dark:bg-emerald-950/60 dark:hover:bg-emerald-900/80 border border-emerald-200 dark:border-emerald-800 text-emerald-700 dark:text-emerald-300 font-bold text-xs flex items-center justify-center gap-1.5 transition-all cursor-pointer shadow-2xs"
-                            >
-                                <Building2 className="w-3.5 h-3.5 text-emerald-500 shrink-0" />
-                                <span>Demo Executive</span>
-                            </button>
-                        </div>
-                    </div>
                 </div>
 
                 {/* Footer copyright */}

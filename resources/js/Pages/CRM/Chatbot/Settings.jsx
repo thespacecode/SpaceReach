@@ -1,0 +1,12 @@
+import AppLayout from '@/Layouts/AppLayout';import{Card,CardContent,CardHeader,CardTitle}from'@/Components/ui/card';import{Button}from'@/Components/ui/button';import{Input}from'@/Components/ui/input';import{useForm}from'@inertiajs/react';
+export default function ChatbotSettings({settings}){const s=settings||{};const{data,setData,post,processing}=useForm({bot_name:s.bot_name||'SpaceBot',welcome_message:s.welcome_message||'',fallback_message:s.fallback_message||'',widget_color:s.widget_color||'#6366F1',widget_position:s.widget_position||'bottom-right',confidence_threshold:s.confidence_threshold||'0.6',collect_info_before_chat:s.collect_info_before_chat||'false'});
+const submit=(e)=>{e.preventDefault();post('/crm/chatbot/settings');};
+return(<AppLayout title="Chatbot Settings" breadcrumbs={[{label:'CRM'},{label:'Chatbot',href:'/crm/chatbot'},{label:'Settings'}]}><Card className="max-w-2xl"><CardHeader><CardTitle>Widget Settings</CardTitle></CardHeader><CardContent><form onSubmit={submit} className="space-y-4">
+<div className="space-y-2"><label className="text-sm font-medium">Bot Name</label><Input value={data.bot_name} onChange={e=>setData('bot_name',e.target.value)}/></div>
+<div className="space-y-2"><label className="text-sm font-medium">Welcome Message</label><textarea className="flex w-full rounded-md border border-input bg-background px-3 py-2 text-sm min-h-[60px]" value={data.welcome_message} onChange={e=>setData('welcome_message',e.target.value)}/></div>
+<div className="space-y-2"><label className="text-sm font-medium">Fallback Message</label><textarea className="flex w-full rounded-md border border-input bg-background px-3 py-2 text-sm min-h-[60px]" value={data.fallback_message} onChange={e=>setData('fallback_message',e.target.value)}/></div>
+<div className="grid grid-cols-2 gap-4">
+<div className="space-y-2"><label className="text-sm font-medium">Widget Color</label><Input type="color" value={data.widget_color} onChange={e=>setData('widget_color',e.target.value)} className="h-10"/></div>
+<div className="space-y-2"><label className="text-sm font-medium">Confidence Threshold</label><Input type="number" step="0.1" min="0" max="1" value={data.confidence_threshold} onChange={e=>setData('confidence_threshold',e.target.value)}/></div>
+</div>
+<Button type="submit" variant="gradient" disabled={processing}>{processing?'Saving...':'Save Settings'}</Button></form></CardContent></Card></AppLayout>);}

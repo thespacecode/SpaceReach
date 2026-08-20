@@ -1,0 +1,805 @@
+/* ============================================================
+   TheSpaceCode-Inspired Login Page Styles (Light Mode)
+   ============================================================ */
+
+/* ── Ticker Bar ── */
+.spacecode-ticker-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    height: 34px;
+    background: #f8fafc;
+    border-bottom: 1px solid #e2e8f0;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 16px;
+    box-sizing: border-box;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
+}
+
+.spacecode-live-badge {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: #EAF212;
+    border: 1px solid #d8e00d;
+    border-radius: 4px;
+    padding: 3px 8px;
+    font-family: 'SF Mono', 'Fira Code', 'Cascadia Code', monospace;
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 1px;
+    color: #0f172a;
+    text-transform: uppercase;
+    flex-shrink: 0;
+    margin-right: 12px;
+}
+
+.spacecode-live-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #16a34a;
+    box-shadow: 0 0 6px rgba(22, 163, 74, 0.6);
+    animation: spacecode-pulse 1.5s ease-in-out infinite;
+}
+
+.spacecode-ticker-marquee {
+    flex: 1;
+    overflow: hidden;
+    position: relative;
+    height: 34px;
+    display: flex;
+    align-items: center;
+}
+
+.spacecode-ticker-track {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    white-space: nowrap;
+    will-change: transform;
+}
+
+.spacecode-ticker-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 0 16px;
+    border-right: 1px solid #e2e8f0;
+    height: 34px;
+    flex-shrink: 0;
+}
+
+.spacecode-ticker-symbol {
+    font-family: 'SF Mono', 'Fira Code', 'Cascadia Code', monospace;
+    font-size: 10px;
+    font-weight: 700;
+    color: #64748b;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+}
+
+.spacecode-ticker-value {
+    font-family: 'SF Mono', 'Fira Code', 'Cascadia Code', monospace;
+    font-size: 11px;
+    font-weight: 700;
+    color: #0f172a;
+}
+
+.spacecode-ticker-change {
+    font-family: 'SF Mono', 'Fira Code', 'Cascadia Code', monospace;
+    font-size: 10px;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 2px;
+}
+
+.spacecode-up {
+    color: #16a34a;
+}
+
+.spacecode-down {
+    color: #dc2626;
+}
+
+.spacecode-top-clock {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: 'SF Mono', 'Fira Code', 'Cascadia Code', monospace;
+    font-size: 12px;
+    font-weight: 700;
+    color: #0f172a;
+    flex-shrink: 0;
+    margin-left: 12px;
+    background: #ffffff;
+    padding: 3px 10px;
+    border-radius: 4px;
+    border: 1px solid #cbd5e1;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
+}
+
+.spacecode-tz-badge {
+    font-size: 10px;
+    font-weight: 800;
+    color: #0f172a;
+    background: #EAF212;
+    padding: 2px 6px;
+    border-radius: 3px;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+}
+
+/* ── Page Layout ── */
+.spacecode-page {
+    display: flex;
+    min-height: 100vh;
+    background: #ffffff;
+    padding-top: 34px; /* ticker bar height */
+}
+
+/* ── Left Column (Form) ── */
+.spacecode-left {
+    width: 480px;
+    min-width: 420px;
+    max-width: 520px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 40px 48px;
+    background: #ffffff;
+    border-right: 1px solid #EDEDED;
+    position: relative;
+    z-index: 10;
+    box-shadow: 4px 0 24px rgba(0, 0, 0, 0.02);
+}
+
+/* ── Brand ── */
+.spacecode-brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.spacecode-logo {
+    height: 28px;
+    width: auto;
+    filter: none;
+}
+
+.spacecode-brand-divider {
+    width: 1px;
+    height: 20px;
+    background: #cbd5e1;
+}
+
+.spacecode-brand-label {
+    font-family: 'SF Mono', 'Fira Code', 'Cascadia Code', monospace;
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 3px;
+    color: #0f172a;
+    background: #EAF212;
+    padding: 2px 6px;
+    border-radius: 4px;
+    text-transform: uppercase;
+}
+
+/* ── Form Container ── */
+.spacecode-form-container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    max-width: 380px;
+}
+
+.spacecode-form-header {
+    margin-bottom: 32px;
+}
+
+.spacecode-title {
+    font-family: 'Inter', system-ui, sans-serif;
+    font-size: 28px;
+    font-weight: 800;
+    color: #0f172a;
+    letter-spacing: -0.5px;
+    margin: 0 0 8px 0;
+    line-height: 1.2;
+}
+
+.spacecode-subtitle {
+    font-size: 13px;
+    color: #64748b;
+    font-weight: 400;
+    margin: 0;
+    line-height: 1.5;
+}
+
+/* ── Form ── */
+.spacecode-form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.spacecode-field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.spacecode-label {
+    font-family: 'SF Mono', 'Fira Code', 'Cascadia Code', monospace;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    color: #475569;
+    text-transform: uppercase;
+}
+
+.spacecode-input-wrapper {
+    position: relative;
+}
+
+.spacecode-input {
+    width: 100%;
+    height: 48px;
+    padding: 0 16px;
+    font-size: 14px;
+    font-weight: 500;
+    color: #0f172a;
+    background: #f8fafc;
+    border: 1px solid #cbd5e1;
+    border-radius: 6px;
+    outline: none;
+    transition: all 0.2s ease;
+    font-family: 'Inter', system-ui, sans-serif;
+    box-sizing: border-box;
+}
+
+.spacecode-input::placeholder {
+    color: #94a3b8;
+    font-weight: 400;
+}
+
+.spacecode-input:focus {
+    border-color: #EAF212;
+    background: #ffffff;
+    box-shadow: 0 0 0 3px rgba(234, 242, 18, 0.25);
+}
+
+.spacecode-password-toggle {
+    position: absolute;
+    right: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    color: #64748b;
+    cursor: pointer;
+    padding: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: color 0.2s;
+}
+
+.spacecode-password-toggle:hover {
+    color: #0f172a;
+}
+
+/* ── Form Meta (Remember + Forgot) ── */
+.spacecode-form-meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.spacecode-checkbox-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    font-size: 12px;
+    color: #475569;
+    font-weight: 500;
+    transition: color 0.2s;
+}
+
+.spacecode-checkbox-label:hover {
+    color: #0f172a;
+}
+
+.spacecode-checkbox {
+    width: 14px;
+    height: 14px;
+    accent-color: #EAF212;
+    cursor: pointer;
+    border-radius: 3px;
+}
+
+.spacecode-link {
+    font-size: 12px;
+    font-weight: 600;
+    color: #0f172a;
+    text-decoration: underline;
+    transition: all 0.2s;
+}
+
+.spacecode-link:hover {
+    color: #4338ca;
+}
+
+/* ── Submit Button ── */
+.spacecode-submit {
+    width: 100%;
+    height: 48px;
+    margin-top: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    font-size: 14px;
+    font-weight: 800;
+    color: #0f172a;
+    background: #EAF212;
+    border: 1px solid #d8e00d;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    letter-spacing: 0.3px;
+    font-family: 'Inter', system-ui, sans-serif;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 4px 14px rgba(234, 242, 18, 0.4);
+}
+
+.spacecode-submit::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(255,255,255,0.3) 0%, transparent 50%);
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.spacecode-submit:hover:not(:disabled) {
+    background: #d8e00d;
+    color: #0f172a;
+    transform: translateY(-1px);
+    box-shadow: 0 6px 20px rgba(234, 242, 18, 0.5);
+}
+
+.spacecode-submit:hover::before {
+    opacity: 1;
+}
+
+.spacecode-submit:active:not(:disabled) {
+    transform: translateY(0);
+}
+
+.spacecode-submit:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.spacecode-spinner {
+    width: 16px;
+    height: 16px;
+    border: 2px solid rgba(15, 23, 42, 0.3);
+    border-top-color: #0f172a;
+    border-radius: 50%;
+    animation: spacecode-spin 0.6s linear infinite;
+}
+
+@keyframes spacecode-spin {
+    to { transform: rotate(360deg); }
+}
+
+/* ── Alerts ── */
+.spacecode-alert {
+    padding: 12px 16px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    line-height: 1.5;
+}
+
+.spacecode-alert-success {
+    background: #f0fdf4;
+    border: 1px solid #bbf7d0;
+    color: #15803d;
+}
+
+.spacecode-alert-error {
+    background: #fef2f2;
+    border: 1px solid #fecaca;
+    color: #b91c1c;
+    flex-direction: column;
+    gap: 4px;
+}
+
+/* ── Security Note ── */
+.spacecode-security-note {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 24px;
+    font-size: 11px;
+    color: #64748b;
+}
+
+/* ── Footer ── */
+.spacecode-footer {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 11px;
+    color: #64748b;
+}
+
+.spacecode-footer-divider {
+    color: #cbd5e1;
+}
+
+.spacecode-footer-link {
+    color: #475569;
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+.spacecode-footer-link:hover {
+    color: #4f46e5;
+}
+
+/* ── Right Column (Data Terminal) ── */
+.spacecode-right {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 60px;
+    position: relative;
+    overflow: hidden;
+    background: linear-gradient(135deg, #ffffff 0%, #f8f8f8 50%, #f1f1f1 100%);
+}
+
+/* Subtle grid background */
+.spacecode-grid-overlay {
+    display: none;
+}
+
+/* ── Time Display ── */
+.spacecode-time-display {
+    text-align: center;
+    margin-bottom: 48px;
+}
+
+.spacecode-clock {
+    font-family: 'SF Mono', 'Fira Code', 'Cascadia Code', monospace;
+    font-size: 56px;
+    font-weight: 300;
+    color: #0f172a;
+    letter-spacing: 3px;
+    line-height: 1;
+}
+
+.spacecode-date {
+    font-size: 13px;
+    color: #475569;
+    margin-top: 12px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    font-weight: 600;
+}
+
+/* ── Terminal Section ── */
+.spacecode-terminal-section {
+    width: 100%;
+    max-width: 600px;
+}
+
+.spacecode-terminal-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 20px;
+    font-family: 'SF Mono', 'Fira Code', 'Cascadia Code', monospace;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    color: #64748b;
+    text-transform: uppercase;
+}
+
+.spacecode-terminal-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #16a34a;
+    box-shadow: 0 0 8px rgba(22, 163, 74, 0.5);
+    animation: spacecode-pulse 2s ease-in-out infinite;
+}
+
+@keyframes spacecode-pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+}
+
+/* ── Stats Grid ── */
+.spacecode-stats-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+}
+
+.spacecode-stat-card {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    padding: 20px;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.03);
+}
+
+.spacecode-stat-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: #EAF212;
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.spacecode-stat-card:hover {
+    background: #ffffff;
+    border-color: #EAF212;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(234, 242, 18, 0.2);
+}
+
+.spacecode-stat-card:hover::before {
+    opacity: 1;
+}
+
+.spacecode-stat-icon {
+    color: #0f172a;
+    margin-bottom: 12px;
+    opacity: 0.9;
+}
+
+.spacecode-stat-value {
+    font-family: 'Inter', system-ui, sans-serif;
+    font-size: 22px;
+    font-weight: 800;
+    color: #0f172a;
+    letter-spacing: -0.5px;
+    margin-bottom: 4px;
+    line-height: 1.2;
+}
+
+.spacecode-stat-label {
+    font-size: 11px;
+    color: #64748b;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 8px;
+}
+
+.spacecode-stat-change {
+    font-family: 'SF Mono', 'Fira Code', 'Cascadia Code', monospace;
+    font-size: 10px;
+    font-weight: 700;
+}
+
+/* ── Mini Terminal ── */
+.spacecode-mini-terminal {
+    width: 100%;
+    max-width: 600px;
+    margin-top: 32px;
+    padding: 16px 20px;
+    background: #0f172a;
+    border: 1px solid #1e293b;
+    border-radius: 8px;
+    font-family: 'SF Mono', 'Fira Code', 'Cascadia Code', monospace;
+    box-shadow: 0 4px 16px rgba(15, 23, 42, 0.15);
+}
+
+.spacecode-terminal-line {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 4px 0;
+    font-size: 11px;
+}
+
+.spacecode-terminal-prompt {
+    color: #818cf8;
+    font-weight: 700;
+}
+
+.spacecode-terminal-cmd {
+    color: #cbd5e1;
+}
+
+.spacecode-terminal-result {
+    margin-left: auto;
+    color: #94a3b8;
+    font-weight: 600;
+}
+
+/* ── Watermark ── */
+.spacecode-watermark {
+    position: absolute;
+    bottom: 30px;
+    right: 40px;
+    font-family: 'Inter', system-ui, sans-serif;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 6px;
+    color: rgba(15, 23, 42, 0.05);
+    text-transform: uppercase;
+    pointer-events: none;
+}
+
+/* ── Responsive (Keep Entire Structure Visible & Fully Mobile Friendly) ── */
+@media (max-width: 1024px) {
+    .spacecode-page {
+        flex-direction: column;
+    }
+
+    .spacecode-left {
+        width: 100%;
+        min-width: unset;
+        max-width: 100%;
+        padding: 40px 32px;
+        border-right: none;
+        border-bottom: 1px solid #e2e8f0;
+        box-sizing: border-box;
+    }
+
+    .spacecode-form-container {
+        max-width: 440px;
+        width: 100%;
+        margin: 0 auto;
+    }
+
+    .spacecode-right {
+        display: flex;
+        width: 100%;
+        padding: 48px 32px;
+        box-sizing: border-box;
+    }
+
+    .spacecode-terminal-section {
+        max-width: 600px;
+        width: 100%;
+    }
+
+    .spacecode-brand {
+        justify-content: flex-start;
+        margin-bottom: 24px;
+    }
+
+    .spacecode-footer {
+        justify-content: flex-start;
+        margin-top: 32px;
+    }
+}
+
+@media (max-width: 640px) {
+    .spacecode-ticker-bar {
+        padding: 0 8px;
+    }
+
+    .spacecode-live-badge {
+        padding: 2px 6px;
+        font-size: 9px;
+        margin-right: 6px;
+        gap: 4px;
+    }
+
+    .spacecode-top-clock {
+        padding: 2px 6px;
+        font-size: 11px;
+        margin-left: 6px;
+        gap: 4px;
+    }
+
+    .spacecode-tz-badge {
+        font-size: 9px;
+        padding: 1px 4px;
+    }
+
+    .spacecode-left {
+        padding: 28px 20px;
+    }
+
+    .spacecode-right {
+        padding: 36px 20px;
+    }
+
+    .spacecode-clock {
+        font-size: 40px;
+    }
+
+    .spacecode-time-display {
+        margin-bottom: 32px;
+    }
+
+    .spacecode-stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+    }
+
+    .spacecode-stat-card {
+        padding: 14px;
+    }
+
+    .spacecode-stat-value {
+        font-size: 18px;
+    }
+
+    .spacecode-mini-terminal {
+        margin-top: 24px;
+        padding: 12px 14px;
+    }
+
+    .spacecode-watermark {
+        position: relative;
+        bottom: auto;
+        right: auto;
+        margin-top: 24px;
+        text-align: center;
+    }
+}
+
+@media (max-width: 480px) {
+    .spacecode-title {
+        font-size: 24px;
+    }
+
+    .spacecode-clock {
+        font-size: 32px;
+    }
+
+    .spacecode-stats-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .spacecode-live-badge span:last-child {
+        display: none;
+    }
+
+    .spacecode-live-badge {
+        padding: 3px 5px;
+    }
+
+    .spacecode-form-meta {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+    }
+
+    .spacecode-footer {
+        flex-wrap: wrap;
+        gap: 6px;
+    }
+}

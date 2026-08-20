@@ -73,8 +73,14 @@ Route::middleware(['auth'])->group(function () {
     // Global Search API
     Route::get('/api/global-search', [GlobalSearchController::class, 'search'])->name('api.global-search');
 
-    // Dashboard
-    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    // Dashboard (Multi-Dashboard CRUD)
+    Route::prefix('dashboard')->name('dashboard.')->group(function () {
+        Route::get('/', [DashboardController::class, 'index'])->name('index');
+        Route::post('/', [DashboardController::class, 'store'])->name('store');
+        Route::get('/{dashboard}', [DashboardController::class, 'show'])->name('show');
+        Route::put('/{dashboard}', [DashboardController::class, 'update'])->name('update');
+        Route::delete('/{dashboard}', [DashboardController::class, 'destroy'])->name('destroy');
+    });
 
     // ── Employees ──
     Route::prefix('employees')->name('employees.')->group(function () {

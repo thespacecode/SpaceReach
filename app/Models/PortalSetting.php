@@ -10,25 +10,37 @@ class PortalSetting extends Model
 
     public static function get(string $key, $default = null)
     {
-        $setting = static::where('key', $key)->first();
-        return $setting ? $setting->value : $default;
+        try {
+            $setting = static::where('key', $key)->first();
+            return $setting ? $setting->value : $default;
+        } catch (\Throwable $e) {
+            return $default;
+        }
     }
 
     public static function set(string $key, $value, string $type = 'text', string $group = 'general'): void
     {
-        static::updateOrCreate(
-            ['key' => $key],
-            ['value' => $value, 'type' => $type, 'group' => $group]
-        );
+        try {
+            static::updateOrCreate(
+                ['key' => $key],
+                ['value' => $value, 'type' => $type, 'group' => $group]
+            );
+        } catch (\Throwable $e) {
+            // Ignore if setting table is unavailable
+        }
     }
 
     public static function getAll(string $group = null): array
     {
-        $query = static::query();
-        if ($group) {
-            $query->where('group', $group);
+        try {
+            $query = static::query();
+            if ($group) {
+                $query->where('group', $group);
+            }
+            return $query->pluck('value', 'key')->toArray();
+        } catch (\Throwable $e) {
+            return [];
         }
-        return $query->pluck('value', 'key')->toArray();
     }
 
     /**

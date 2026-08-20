@@ -12,9 +12,11 @@ class Top30CompaniesSeeder extends Seeder
 {
     public function run()
     {
-        // 1. Wipe existing contacts and activities
+        // 1. Wipe existing contacts and activities safely
+        DB::statement('SET FOREIGN_KEY_CHECKS=0;');
         ContactActivity::truncate();
         Contact::truncate();
+        DB::statement('SET FOREIGN_KEY_CHECKS=1;');
 
         $admin = User::first();
         $adminId = $admin ? $admin->id : 1;

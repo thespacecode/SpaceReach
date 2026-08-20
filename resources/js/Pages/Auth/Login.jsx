@@ -198,13 +198,13 @@ export default function Login({ status }) {
                             className="h-5 w-auto object-contain rounded-md opacity-80 hover:opacity-100"
                         />
                     </a>
-                    <div className="text-center text-[10px] text-muted-foreground/60 font-medium flex flex-wrap items-center justify-center gap-1 leading-tight">
+                    <div className="text-center text-[9px] text-muted-foreground/60 font-semibold uppercase tracking-wider flex flex-wrap items-center justify-center gap-1 leading-tight">
                         <span>© {new Date().getFullYear()} {companyName}. Built & Powered by</span>
                         <a 
                             href="https://thespacecode.com" 
                             target="_blank" 
                             rel="noopener noreferrer" 
-                            className="text-indigo-600 dark:text-indigo-400 hover:underline font-semibold"
+                            className="text-indigo-600 dark:text-indigo-400 hover:underline font-bold"
                         >
                             thespacecode.com
                         </a>

@@ -51,7 +51,7 @@ export default function Login({ status }) {
 
             <div 
                 onMouseMove={handleMouseMove}
-                className="min-h-screen w-full flex flex-col items-center justify-center bg-slate-50 dark:bg-slate-950 p-4 sm:p-8 font-sans text-foreground antialiased relative overflow-hidden select-none"
+                className="min-h-screen w-full flex flex-col items-center justify-center bg-white dark:bg-slate-950 p-4 sm:p-8 font-sans text-foreground antialiased relative overflow-hidden select-none"
             >
                 {/* Small Floating Circular Interactive Badges */}
                 {FLOATING_CIRCLES.map((item) => {
@@ -64,15 +64,15 @@ export default function Login({ status }) {
                             style={{
                                 transform: `translate3d(${offsetX}px, ${offsetY}px, 0px)`,
                             }}
-                            className={`absolute ${item.pos} ${item.size} ${item.color} rounded-full border backdrop-blur-xs flex items-center justify-center pointer-events-none transition-transform duration-300 ease-out shadow-xs z-0 hidden md:flex`}
+                            className={`absolute ${item.pos} ${item.size} ${item.color} rounded-full border flex items-center justify-center pointer-events-none transition-transform duration-300 ease-out z-0 hidden md:flex`}
                         >
                             <Icon className="w-1/2 h-1/2" />
                         </div>
                     );
                 })}
 
-                {/* Main Centered Login Card Container (Tall Height with Center Center Content Alignment) */}
-                <div className="w-full max-w-md min-h-[580px] bg-card/95 backdrop-blur-md rounded-3xl p-10 sm:p-12 flex flex-col items-center justify-center space-y-6 relative z-10 transition-all">
+                {/* Main Centered Login Container */}
+                <div className="w-full max-w-md min-h-[580px] p-6 sm:p-8 flex flex-col items-center justify-center space-y-6 relative z-10 transition-all">
                     {/* Header */}
                     <div className="text-center space-y-1 flex flex-col items-center w-full">
                         <h1 className="text-3xl font-medium text-foreground tracking-normal">
@@ -100,7 +100,7 @@ export default function Login({ status }) {
                         </div>
                     )}
 
-                    {/* Credentials Form (Increased Input & Button Height) */}
+                    {/* Credentials Form */}
                     <form onSubmit={submit} className="w-full space-y-5">
                         {/* Email Address */}
                         <div className="space-y-2">
@@ -117,7 +117,7 @@ export default function Login({ status }) {
                                     onChange={(e) => setData('email', e.target.value)}
                                     required
                                     autoFocus
-                                    className="w-full h-12 pl-10 pr-4 text-sm bg-muted/40 hover:bg-muted/70 focus:bg-background border border-border focus:border-indigo-600 rounded-xl text-foreground placeholder:text-muted-foreground transition-all outline-none font-medium"
+                                    className="w-full h-12 pl-10 pr-4 text-sm bg-transparent border border-border focus:border-indigo-600 rounded-xl text-foreground placeholder:text-muted-foreground transition-all outline-none font-medium"
                                 />
                             </div>
                         </div>
@@ -136,7 +136,7 @@ export default function Login({ status }) {
                                     value={data.password}
                                     onChange={(e) => setData('password', e.target.value)}
                                     required
-                                    className="w-full h-12 pl-10 pr-11 text-sm bg-muted/40 hover:bg-muted/70 focus:bg-background border border-border focus:border-indigo-600 rounded-xl text-foreground placeholder:text-muted-foreground transition-all outline-none font-medium"
+                                    className="w-full h-12 pl-10 pr-11 text-sm bg-transparent border border-border focus:border-indigo-600 rounded-xl text-foreground placeholder:text-muted-foreground transition-all outline-none font-medium"
                                 />
                                 <button
                                     type="button"

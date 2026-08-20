@@ -3,295 +3,410 @@ import AppLayout from '@/Layouts/AppLayout';
 import DataTable from '@/Components/DataTable';
 import SlideOverDrawer from '@/Components/SlideOverDrawer';
 import { 
-    TrendingUp, TrendingDown, DollarSign, Users, Contact, HandCoins, 
-    Sparkles, ArrowUpRight, AlertTriangle, Activity, ArrowRight, ShieldCheck, 
-    Filter, Calendar, ChevronRight, Plus, Download, CheckCircle2, Clock
+    TrendingUp, DollarSign, Briefcase, PieChart as PieIcon, 
+    ArrowUpRight, ArrowRight, ShieldCheck, Sparkles, Building2, 
+    Layers, Target, Award, ArrowUp, ArrowDown
 } from 'lucide-react';
 import { 
     ResponsiveContainer, AreaChart, Area, XAxis, YAxis, Tooltip, CartesianGrid, 
-    BarChart, Bar, LineChart, Line 
+    BarChart, Bar, PieChart, Pie, Cell, Legend 
 } from 'recharts';
-import { cn } from '@/lib/utils';
 import { Button } from '@/Components/ui/button';
 
-const KPI_DATA = [
-    { label: 'Annual Recurring Revenue', val: '$2,840,500', change: '+18.4%', trend: 'up', sub: 'vs $2.4M last quarter', spark: [40, 55, 62, 70, 85, 98, 110] },
-    { label: 'Qualified Enterprise Leads', val: '1,420', change: '+12.1%', trend: 'up', sub: '78% high-intent ICP', spark: [20, 25, 30, 28, 35, 42, 50] },
-    { label: 'Pipeline Velocity', val: '14.2 Days', change: '-2.4 Days', trend: 'up', sub: 'Faster close velocity', spark: [25, 22, 20, 18, 16, 15, 14] },
-    { label: 'Win Rate Ratio', val: '34.8%', change: '+4.2%', trend: 'up', sub: 'Enterprise benchmark 28%', spark: [28, 30, 29, 32, 33, 34, 35] },
-    { label: 'AI Predictive Conversion Score', val: '92 / 100', change: '+5.0', trend: 'up', sub: 'High confidence index', spark: [80, 82, 85, 88, 89, 90, 92] }
-];
-
-const ANALYTICS_SERIES = [
-    { period: 'Jan', revenue: 180000, leads: 240, deals: 32 },
-    { period: 'Feb', revenue: 210000, leads: 280, deals: 38 },
-    { period: 'Mar', revenue: 245000, leads: 320, deals: 44 },
-    { period: 'Apr', revenue: 290000, leads: 410, deals: 52 },
-    { period: 'May', revenue: 340000, leads: 490, deals: 64 },
-    { period: 'Jun', revenue: 395000, leads: 580, deals: 78 },
-    { period: 'Jul', revenue: 460000, leads: 670, deals: 92 },
-    { period: 'Aug', revenue: 520000, leads: 790, deals: 110 }
-];
-
-const RECENT_LEADS = [
-    { id: 'LD-1092', name: 'Apex Global Technologies', contact: 'Sarah Jenkins', value: '$180,000', score: 96, stage: 'Qualified ICP', status: 'High Intent', owner: 'Alex Rivera' },
-    { id: 'LD-1093', name: 'Starlight Financial Systems', contact: 'Marcus Vance', value: '$340,000', score: 92, stage: 'Proposal Sent', status: 'Negotiation', owner: 'Elena Rostova' },
-    { id: 'LD-1094', name: 'OmniHealth Solutions', contact: 'David Chen', value: '$95,000', score: 88, stage: 'Demo Scheduled', status: 'In Discovery', owner: 'Marcus Vance' },
-    { id: 'LD-1095', name: 'CyberShield Systems', contact: 'Rachel Adams', value: '$420,000', score: 99, stage: 'Contract Legal', status: 'Closing', owner: 'Alex Rivera' },
-    { id: 'LD-1096', name: 'Vanguard Capital Partners', contact: 'Michael Scott', value: '$210,000', score: 84, stage: 'Qualified ICP', status: 'Follow Up', owner: 'Elena Rostova' }
-];
-
-const ACTIVITY_FEED = [
-    { id: 1, title: 'Contract Signed', detail: 'CyberShield Systems approved $420k annual plan.', time: '12m ago', type: 'success' },
-    { id: 2, title: 'High-Value Lead Assigned', detail: 'Apex Global ($180k target) assigned to Alex Rivera.', time: '45m ago', type: 'ai' },
-    { id: 3, title: 'Payment Confirmed', detail: '$95,000 received for Invoice #INV-2026-88.', time: '2h ago', type: 'info' },
-    { id: 4, title: 'AI Anomaly Flag', detail: 'SMB outbound response rate dropped 3.2% in EU region.', time: '4h ago', type: 'warning' }
-];
-
-export default function Dashboard() {
-    const [selectedLead, setSelectedLead] = useState(null);
+export default function Dashboard({ 
+    stats = {}, 
+    opportunityTrends = [], 
+    pipelineByStage = [], 
+    dealsByCompany = [], 
+    leadSources = [], 
+    recentDeals = [] 
+}) {
+    const [selectedDeal, setSelectedDeal] = useState(null);
     const [drawerOpen, setDrawerOpen] = useState(false);
 
+    // Format currency helpers
+    const formatCurrency = (amount) => {
+        return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 }).format(amount || 0);
+    };
+
+    const formatShortNumber = (val) => {
+        if (val >= 1000000) return `$${(val / 1000000).toFixed(1)}M`;
+        if (val >= 1000) return `$${(val / 1000).toFixed(0)}k`;
+        return `$${val}`;
+    };
+
+    // Columns for Recent Opportunities Data Table
     const columns = [
-        { key: 'id', label: 'ID', render: (val) => <span className="font-mono text-muted-foreground font-medium">{val}</span> },
-        { key: 'name', label: 'Account / Lead Name', render: (val) => <span className="font-semibold text-foreground">{val}</span> },
-        { key: 'contact', label: 'Primary Contact' },
-        { key: 'value', label: 'Contract Value', align: 'right', render: (val) => <span className="font-semibold text-foreground">{val}</span> },
         { 
-            key: 'score', 
-            label: 'AI Intent', 
+            key: 'id', 
+            label: 'ID', 
+            render: (val) => <span className="font-mono text-muted-foreground font-semibold text-xs">{val}</span> 
+        },
+        { 
+            key: 'company', 
+            label: 'Company / Account', 
+            render: (val, row) => (
+                <div className="flex flex-col">
+                    <span className="font-bold text-foreground text-xs">{val}</span>
+                    <span className="text-[11px] text-muted-foreground">{row.name}</span>
+                </div>
+            ) 
+        },
+        { 
+            key: 'contact', 
+            label: 'Primary Contact',
+            render: (val) => <span className="text-xs font-medium text-foreground">{val}</span>
+        },
+        { 
+            key: 'value', 
+            label: 'Deal Value', 
+            align: 'right', 
+            render: (val) => <span className="font-extrabold text-foreground font-mono text-xs">{val}</span> 
+        },
+        { 
+            key: 'probability', 
+            label: 'Win Probability', 
             align: 'center',
             render: (val) => (
-                <div className="inline-flex items-center gap-1 font-mono font-bold text-xs px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-600 border border-emerald-500/20">
+                <span className="inline-flex items-center gap-1 font-mono font-bold text-[11px] px-2 py-0.5 rounded-full bg-indigo-500/10 text-indigo-600 border border-indigo-500/20">
                     <Sparkles className="w-3 h-3 text-amber-500" />
-                    <span>{val}/100</span>
-                </div>
+                    <span>{val}</span>
+                </span>
             )
         },
         { 
             key: 'stage', 
             label: 'Pipeline Stage',
-            render: (val) => (
-                <span className="px-2.5 py-0.5 rounded-md text-[11px] font-semibold bg-muted text-foreground border border-border">
+            render: (val, row) => (
+                <span 
+                    className="px-2.5 py-0.5 rounded-md text-[11px] font-bold text-white shadow-2xs"
+                    style={{ backgroundColor: row.stage_color || '#6366f1' }}
+                >
                     {val}
                 </span>
             )
         },
-        { key: 'owner', label: 'Owner' }
+        { key: 'owner', label: 'Owner', render: (val) => <span className="text-xs text-muted-foreground font-medium">{val}</span> }
     ];
 
-    const handleRowClick = (lead) => {
-        setSelectedLead(lead);
+    const handleRowClick = (deal) => {
+        setSelectedDeal(deal);
         setDrawerOpen(true);
     };
 
     return (
-        <AppLayout title="Overview Dashboard">
-            <div className="space-y-6 animate-fade-in">
-                {/* KPI Sparkline Grid (5 Columns High-Density) */}
-
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3.5">
-                    {KPI_DATA.map((kpi, idx) => (
-                        <div key={idx} className="p-3.5 bg-card border border-border rounded-xl shadow-xs flex flex-col justify-between hover:border-border/80 transition-all">
-                            <div>
-                                <span className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">{kpi.label}</span>
-                                <div className="mt-1 flex items-baseline justify-between gap-2">
-                                    <span className="text-lg font-bold tracking-tight text-foreground font-mono">{kpi.val}</span>
-                                    <span className="text-[11px] font-bold text-emerald-600 bg-emerald-500/10 px-1.5 py-0.5 rounded border border-emerald-500/20">
-                                        {kpi.change}
-                                    </span>
-                                </div>
-                                <span className="text-[10px] text-muted-foreground mt-1 block">{kpi.sub}</span>
-                            </div>
-
-                            {/* Mini Sparkline Visualization */}
-                            <div className="h-7 w-full mt-3">
-                                <ResponsiveContainer width="100%" height="100%">
-                                    <LineChart data={kpi.spark.map((v, i) => ({ i, v }))}>
-                                        <Line type="monotone" dataKey="v" stroke="#1C1C18" strokeWidth={1.5} dot={false} />
-                                    </LineChart>
-                                </ResponsiveContainer>
+        <AppLayout title="Analytics & Revenue Telemetry">
+            <div className="space-y-6 animate-fade-in pb-8 select-none">
+                
+                {/* ── 1. KPI HIGHLIGHT CARDS (4 Essential Metrics) ── */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                    {/* Card 1: Total Pipeline Value */}
+                    <div className="p-5 bg-card border border-border/80 rounded-2xl shadow-xs flex flex-col justify-between hover:border-indigo-500/40 transition-all">
+                        <div className="flex items-center justify-between">
+                            <span className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Total Pipeline Value</span>
+                            <div className="w-9 h-9 rounded-xl bg-indigo-500/10 text-indigo-600 flex items-center justify-center">
+                                <DollarSign className="w-5 h-5" />
                             </div>
                         </div>
-                    ))}
+                        <div className="mt-3">
+                            <div className="text-2xl font-black text-foreground font-mono tracking-tight">
+                                {formatCurrency(stats.total_pipeline)}
+                            </div>
+                            <div className="mt-1 flex items-center gap-1.5 text-xs font-semibold text-emerald-600">
+                                <ArrowUp className="w-3.5 h-3.5" />
+                                <span>+14.2%</span>
+                                <span className="text-muted-foreground font-normal text-[11px]">vs last month</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Card 2: Won Revenue */}
+                    <div className="p-5 bg-card border border-border/80 rounded-2xl shadow-xs flex flex-col justify-between hover:border-emerald-500/40 transition-all">
+                        <div className="flex items-center justify-between">
+                            <span className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Closed Won Revenue</span>
+                            <div className="w-9 h-9 rounded-xl bg-emerald-500/10 text-emerald-600 flex items-center justify-center">
+                                <Award className="w-5 h-5" />
+                            </div>
+                        </div>
+                        <div className="mt-3">
+                            <div className="text-2xl font-black text-foreground font-mono tracking-tight">
+                                {formatCurrency(stats.won_revenue)}
+                            </div>
+                            <div className="mt-1 flex items-center gap-1.5 text-xs font-semibold text-emerald-600">
+                                <ArrowUp className="w-3.5 h-3.5" />
+                                <span>+22.8%</span>
+                                <span className="text-muted-foreground font-normal text-[11px]">target achieved</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Card 3: Active Opportunities */}
+                    <div className="p-5 bg-card border border-border/80 rounded-2xl shadow-xs flex flex-col justify-between hover:border-blue-500/40 transition-all">
+                        <div className="flex items-center justify-between">
+                            <span className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Active Opportunities</span>
+                            <div className="w-9 h-9 rounded-xl bg-blue-500/10 text-blue-600 flex items-center justify-center">
+                                <Briefcase className="w-5 h-5" />
+                            </div>
+                        </div>
+                        <div className="mt-3">
+                            <div className="text-2xl font-black text-foreground font-mono tracking-tight">
+                                {stats.active_deals} <span className="text-xs text-muted-foreground font-sans font-normal">Deals</span>
+                            </div>
+                            <div className="mt-1 flex items-center gap-1.5 text-xs font-semibold text-blue-600">
+                                <Target className="w-3.5 h-3.5" />
+                                <span>Avg. Size {formatShortNumber(stats.avg_deal_size)}</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Card 4: Win Rate % */}
+                    <div className="p-5 bg-card border border-border/80 rounded-2xl shadow-xs flex flex-col justify-between hover:border-amber-500/40 transition-all">
+                        <div className="flex items-center justify-between">
+                            <span className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Sales Win Rate</span>
+                            <div className="w-9 h-9 rounded-xl bg-amber-500/10 text-amber-600 flex items-center justify-center">
+                                <TrendingUp className="w-5 h-5" />
+                            </div>
+                        </div>
+                        <div className="mt-3">
+                            <div className="text-2xl font-black text-foreground font-mono tracking-tight">
+                                {stats.win_rate}%
+                            </div>
+                            <div className="mt-1 flex items-center gap-1.5 text-xs font-semibold text-amber-600">
+                                <Sparkles className="w-3.5 h-3.5" />
+                                <span>High Conversion Velocity</span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
-                {/* 12-Column Grid: Primary Analytics (8 Cols) + AI Insights (4 Cols) */}
-                <div className="grid grid-cols-1 lg:grid-cols-12 gap-5">
-                    {/* Primary Analytics Chart (8 Columns) */}
-                    <div className="lg:col-span-8 p-4 bg-card border border-border rounded-xl shadow-xs flex flex-col justify-between">
+                {/* ── 2. CHARTS SECTION GRID 1: Wave Opportunity Trend + Pipeline by Stage ── */}
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                    
+                    {/* Opportunity & Revenue Wave Trend (Line / Smooth Area Chart) */}
+                    <div className="lg:col-span-7 p-6 bg-card border border-border/80 rounded-2xl shadow-xs flex flex-col justify-between space-y-4">
                         <div className="flex items-center justify-between pb-3 border-b border-border">
                             <div>
-                                <h3 className="text-sm font-bold text-foreground flex items-center gap-2">
-                                    <TrendingUp className="w-4 h-4 text-emerald-600" />
-                                    Revenue Telemetry & Lead Acquisition Velocity
+                                <h3 className="text-sm font-extrabold text-foreground flex items-center gap-2">
+                                    <TrendingUp className="w-4 h-4 text-indigo-600" />
+                                    Opportunity & Revenue Velocity
                                 </h3>
-                                <p className="text-xs text-muted-foreground">Monthly ARR expansion vs high-intent lead volume.</p>
+                                <p className="text-xs text-muted-foreground">Monthly pipeline creation vs closed won revenue wave trend.</p>
                             </div>
 
-                            <div className="flex items-center gap-2 text-xs font-medium font-mono text-muted-foreground">
-                                <span className="flex items-center gap-1.5">
-                                    <span className="w-2.5 h-2.5 rounded-full bg-foreground" /> ARR ($)
+                            <div className="flex items-center gap-3 text-xs font-semibold">
+                                <span className="flex items-center gap-1.5 text-indigo-600">
+                                    <span className="w-3 h-3 rounded-full bg-indigo-600" /> Pipeline ($)
                                 </span>
-                                <span className="flex items-center gap-1.5">
-                                    <span className="w-2.5 h-2.5 rounded-full bg-primary" /> Lead Volume
+                                <span className="flex items-center gap-1.5 text-emerald-600">
+                                    <span className="w-3 h-3 rounded-full bg-emerald-500" /> Won Revenue ($)
                                 </span>
                             </div>
                         </div>
 
-                        {/* Chart Render */}
-                        <div className="h-72 w-full pt-4">
+                        {/* Smooth Wave Chart */}
+                        <div className="h-72 w-full pt-2">
                             <ResponsiveContainer width="100%" height="100%">
-                                <AreaChart data={ANALYTICS_SERIES}>
+                                <AreaChart data={opportunityTrends}>
                                     <defs>
-                                        <linearGradient id="colorRev" x1="0" y1="0" x2="0" y2="1">
-                                            <stop offset="5%" stopColor="#1C1C18" stopOpacity={0.15}/>
-                                            <stop offset="95%" stopColor="#1C1C18" stopOpacity={0.0}/>
+                                        <linearGradient id="colorPipeline" x1="0" y1="0" x2="0" y2="1">
+                                            <stop offset="5%" stopColor="#4f46e5" stopOpacity={0.3}/>
+                                            <stop offset="95%" stopColor="#4f46e5" stopOpacity={0.0}/>
                                         </linearGradient>
-                                        <linearGradient id="colorLeads" x1="0" y1="0" x2="0" y2="1">
-                                            <stop offset="5%" stopColor="#EAF212" stopOpacity={0.35}/>
-                                            <stop offset="95%" stopColor="#EAF212" stopOpacity={0.0}/>
+                                        <linearGradient id="colorRevenue" x1="0" y1="0" x2="0" y2="1">
+                                            <stop offset="5%" stopColor="#10b981" stopOpacity={0.35}/>
+                                            <stop offset="95%" stopColor="#10b981" stopOpacity={0.0}/>
                                         </linearGradient>
                                     </defs>
-                                    <CartesianGrid strokeDasharray="3 3" stroke="#EDEDED" vertical={false} />
-                                    <XAxis dataKey="period" stroke="#71717A" fontSize={11} tickLine={false} />
-                                    <YAxis yAxisId="left" stroke="#71717A" fontSize={11} tickLine={false} axisLine={false} tickFormatter={(v) => `$${v/1000}k`} />
-                                    <YAxis yAxisId="right" orientation="right" stroke="#71717A" fontSize={11} tickLine={false} axisLine={false} />
-                                    <Tooltip contentStyle={{ backgroundColor: '#1C1C18', border: 'none', borderRadius: '8px', color: '#FFF', fontSize: '11px' }} />
-                                    <Area yAxisId="left" type="monotone" dataKey="revenue" stroke="#1C1C18" strokeWidth={2} fillOpacity={1} fill="url(#colorRev)" />
-                                    <Area yAxisId="right" type="monotone" dataKey="leads" stroke="#EAF212" strokeWidth={2} fillOpacity={1} fill="url(#colorLeads)" />
+                                    <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" vertical={false} />
+                                    <XAxis dataKey="month" stroke="#6b7280" fontSize={11} tickLine={false} />
+                                    <YAxis stroke="#6b7280" fontSize={11} tickLine={false} axisLine={false} tickFormatter={(v) => formatShortNumber(v)} />
+                                    <Tooltip 
+                                        formatter={(val) => [formatCurrency(val), 'Value']}
+                                        contentStyle={{ backgroundColor: '#0f172a', borderRadius: '12px', border: 'none', color: '#fff', fontSize: '12px' }}
+                                    />
+                                    <Area type="monotone" dataKey="pipeline" stroke="#4f46e5" strokeWidth={3} fillOpacity={1} fill="url(#colorPipeline)" name="Pipeline Created" />
+                                    <Area type="monotone" dataKey="revenue" stroke="#10b981" strokeWidth={3} fillOpacity={1} fill="url(#colorRevenue)" name="Won Revenue" />
                                 </AreaChart>
                             </ResponsiveContainer>
                         </div>
                     </div>
 
-                    {/* AI Insights & Actions Panel (4 Columns) */}
-                    <div className="lg:col-span-4 p-4 bg-card border border-border rounded-xl shadow-xs flex flex-col justify-between space-y-4">
+                    {/* Pipeline Value by Stage (Bar Chart) */}
+                    <div className="lg:col-span-5 p-6 bg-card border border-border/80 rounded-2xl shadow-xs flex flex-col justify-between space-y-4">
                         <div className="flex items-center justify-between pb-3 border-b border-border">
-                            <div className="flex items-center gap-2">
-                                <Sparkles className="w-4 h-4 text-amber-500" />
-                                <h3 className="text-sm font-bold text-foreground">AI Intelligence Feed</h3>
-                            </div>
-                            <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-amber-500/10 text-amber-700 border border-amber-500/20">
-                                Live Copilot
-                            </span>
-                        </div>
-
-                        {/* Insight Cards */}
-                        <div className="space-y-3 flex-1 overflow-y-auto">
-                            <div className="p-3 bg-muted/30 border border-border rounded-lg text-xs space-y-1.5">
-                                <div className="flex items-center justify-between">
-                                    <span className="font-bold text-foreground">Revenue Surge Expected</span>
-                                    <span className="text-[10px] text-emerald-600 font-bold">+18.4% Confidence</span>
-                                </div>
-                                <p className="text-muted-foreground text-[11px] leading-relaxed">
-                                    Enterprise prospects in Healthcare and Fintech are closing 3.5 days faster than historical benchmark.
-                                </p>
-                                <div className="pt-1 flex items-center justify-between border-t border-border/40 text-[10px]">
-                                    <span className="font-mono text-muted-foreground">Action: Target Enterprise ICP</span>
-                                    <button className="font-bold text-foreground hover:underline flex items-center gap-1">
-                                        Execute <ArrowRight className="w-3 h-3" />
-                                    </button>
-                                </div>
-                            </div>
-
-                            <div className="p-3 bg-muted/30 border border-border rounded-lg text-xs space-y-1.5">
-                                <div className="flex items-center justify-between">
-                                    <span className="font-bold text-foreground">Deal At Risk Alert</span>
-                                    <span className="text-[10px] text-amber-600 font-bold">Priority High</span>
-                                </div>
-                                <p className="text-muted-foreground text-[11px] leading-relaxed">
-                                    Starlight Financial ($340k) proposal review inactive for 4 days. Executive engagement recommended.
-                                </p>
-                                <div className="pt-1 flex items-center justify-between border-t border-border/40 text-[10px]">
-                                    <span className="font-mono text-muted-foreground">Action: Trigger Executive Touch</span>
-                                    <button className="font-bold text-foreground hover:underline flex items-center gap-1">
-                                        View Deal <ArrowRight className="w-3 h-3" />
-                                    </button>
-                                </div>
+                            <div>
+                                <h3 className="text-sm font-extrabold text-foreground flex items-center gap-2">
+                                    <Layers className="w-4 h-4 text-blue-600" />
+                                    Pipeline Value by Stage
+                                </h3>
+                                <p className="text-xs text-muted-foreground">Distribution of deal capital locked across active stages.</p>
                             </div>
                         </div>
 
-                        {/* System Health */}
-                        <div className="pt-3 border-t border-border flex items-center justify-between text-xs text-muted-foreground">
-                            <span className="flex items-center gap-1.5">
-                                <ShieldCheck className="w-4 h-4 text-emerald-600" />
-                                System Health 100%
-                            </span>
-                            <span className="font-mono text-[10px]">Telemetry Latency 14ms</span>
+                        {/* Stage Bar Chart */}
+                        <div className="h-72 w-full pt-2">
+                            <ResponsiveContainer width="100%" height="100%">
+                                <BarChart data={pipelineByStage}>
+                                    <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" vertical={false} />
+                                    <XAxis dataKey="stage" stroke="#6b7280" fontSize={11} tickLine={false} />
+                                    <YAxis stroke="#6b7280" fontSize={11} tickLine={false} axisLine={false} tickFormatter={(v) => formatShortNumber(v)} />
+                                    <Tooltip 
+                                        formatter={(val) => [formatCurrency(val), 'Stage Value']}
+                                        contentStyle={{ backgroundColor: '#0f172a', borderRadius: '12px', border: 'none', color: '#fff', fontSize: '12px' }}
+                                    />
+                                    <Bar dataKey="value" radius={[6, 6, 0, 0]}>
+                                        {pipelineByStage.map((entry, index) => (
+                                            <Cell key={`cell-${index}`} fill={entry.color || '#6366f1'} />
+                                        ))}
+                                    </Bar>
+                                </BarChart>
+                            </ResponsiveContainer>
                         </div>
                     </div>
                 </div>
 
-                {/* Priority Enterprise Data Table */}
-                <div className="space-y-3">
+                {/* ── 3. CHARTS SECTION GRID 2: Deals by Company + Lead Source Distribution ── */}
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                    
+                    {/* Deals by Company (Horizontal Bar Chart) */}
+                    <div className="lg:col-span-7 p-6 bg-card border border-border/80 rounded-2xl shadow-xs flex flex-col justify-between space-y-4">
+                        <div className="flex items-center justify-between pb-3 border-b border-border">
+                            <div>
+                                <h3 className="text-sm font-extrabold text-foreground flex items-center gap-2">
+                                    <Building2 className="w-4 h-4 text-purple-600" />
+                                    Top Deals by Company
+                                </h3>
+                                <p className="text-xs text-muted-foreground">Enterprise accounts ordered by high contract target value.</p>
+                            </div>
+                        </div>
+
+                        {/* Company Horizontal Bar Chart */}
+                        <div className="h-64 w-full pt-2">
+                            <ResponsiveContainer width="100%" height="100%">
+                                <BarChart layout="vertical" data={dealsByCompany} margin={{ left: 20 }}>
+                                    <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" horizontal={false} />
+                                    <XAxis type="number" stroke="#6b7280" fontSize={11} tickLine={false} axisLine={false} tickFormatter={(v) => formatShortNumber(v)} />
+                                    <YAxis type="category" dataKey="company" stroke="#475569" fontSize={11} tickLine={false} width={130} />
+                                    <Tooltip 
+                                        formatter={(val) => [formatCurrency(val), 'Target Value']}
+                                        contentStyle={{ backgroundColor: '#0f172a', borderRadius: '12px', border: 'none', color: '#fff', fontSize: '12px' }}
+                                    />
+                                    <Bar dataKey="value" fill="#6366f1" radius={[0, 6, 6, 0]} barSize={18} />
+                                </BarChart>
+                            </ResponsiveContainer>
+                        </div>
+                    </div>
+
+                    {/* Lead Sources Distribution (Donut / Pie Chart) */}
+                    <div className="lg:col-span-5 p-6 bg-card border border-border/80 rounded-2xl shadow-xs flex flex-col justify-between space-y-4">
+                        <div className="flex items-center justify-between pb-3 border-b border-border">
+                            <div>
+                                <h3 className="text-sm font-extrabold text-foreground flex items-center gap-2">
+                                    <PieIcon className="w-4 h-4 text-amber-500" />
+                                    Lead Generation Channels
+                                </h3>
+                                <p className="text-xs text-muted-foreground">Proportion of inbound lead acquisition sources.</p>
+                            </div>
+                        </div>
+
+                        {/* Donut Chart */}
+                        <div className="h-64 w-full flex items-center justify-center pt-2">
+                            <ResponsiveContainer width="100%" height="100%">
+                                <PieChart>
+                                    <Pie
+                                        data={leadSources}
+                                        cx="50%"
+                                        cy="50%"
+                                        innerRadius={55}
+                                        outerRadius={85}
+                                        paddingAngle={5}
+                                        dataKey="value"
+                                    >
+                                        {leadSources.map((entry, index) => (
+                                            <Cell key={`cell-pie-${index}`} fill={entry.color} />
+                                        ))}
+                                    </Pie>
+                                    <Tooltip 
+                                        formatter={(val) => [`${val}%`, 'Lead Share']}
+                                        contentStyle={{ backgroundColor: '#0f172a', borderRadius: '12px', border: 'none', color: '#fff', fontSize: '12px' }}
+                                    />
+                                    <Legend 
+                                        verticalAlign="bottom" 
+                                        height={36} 
+                                        iconType="circle"
+                                        formatter={(val) => <span className="text-xs font-medium text-foreground">{val}</span>}
+                                    />
+                                </PieChart>
+                            </ResponsiveContainer>
+                        </div>
+                    </div>
+                </div>
+
+                {/* ── 4. RECENT OPPORTUNITIES & DEALS DATA TABLE ── */}
+                <div className="space-y-4 pt-2">
                     <div className="flex items-center justify-between">
                         <div>
-                            <h3 className="text-sm font-bold text-foreground">High-Priority Enterprise Prospects</h3>
-                            <p className="text-xs text-muted-foreground">Accounts sorted by AI Intent Score and contract velocity.</p>
+                            <h3 className="text-base font-black text-foreground">High-Value Opportunities</h3>
+                            <p className="text-xs text-muted-foreground">Latest enterprise opportunities queued in your sales pipeline.</p>
                         </div>
-                        <Button size="sm" variant="outline" className="h-8 text-xs font-semibold gap-1.5" onClick={() => window.location.href='/contacts'}>
-                            View All Pipeline <ArrowRight className="w-3.5 h-3.5" />
+                        <Button size="sm" variant="outline" className="h-9 text-xs font-bold gap-1.5 cursor-pointer" onClick={() => window.location.href='/contacts'}>
+                            <span>View All Pipeline</span>
+                            <ArrowRight className="w-3.5 h-3.5" />
                         </Button>
                     </div>
 
                     <DataTable 
-                        data={RECENT_LEADS} 
+                        data={recentDeals} 
                         columns={columns} 
-                        searchPlaceholder="Search priority accounts..."
+                        searchPlaceholder="Search opportunities or companies..."
                         onRowClick={handleRowClick}
                     />
                 </div>
 
-                {/* Drawer Detail */}
+                {/* SlideOver Drawer for Opportunity Detail View */}
                 <SlideOverDrawer 
                     open={drawerOpen} 
                     onClose={() => setDrawerOpen(false)}
-                    title={selectedLead?.name || "Account Profile"}
-                    subtitle={`Lead ID: ${selectedLead?.id} • Assigned to ${selectedLead?.owner}`}
+                    title={selectedDeal?.company || "Opportunity Profile"}
+                    subtitle={`Opportunity ID: ${selectedDeal?.id} • Managed by ${selectedDeal?.owner}`}
                 >
-                    {selectedLead && (
-                        <div className="space-y-5 text-xs">
-                            <div className="p-3 bg-muted/40 border border-border rounded-lg flex items-center justify-between">
+                    {selectedDeal && (
+                        <div className="space-y-6 text-xs">
+                            <div className="p-4 bg-muted/40 border border-border rounded-xl flex items-center justify-between">
                                 <div>
-                                    <span className="text-muted-foreground font-mono">Contract Target Value</span>
-                                    <div className="text-lg font-bold text-foreground font-mono">{selectedLead.value}</div>
+                                    <span className="text-muted-foreground font-mono text-[11px] block uppercase">Contract Target</span>
+                                    <div className="text-xl font-black text-foreground font-mono">{selectedDeal.value}</div>
                                 </div>
                                 <div className="text-right">
-                                    <span className="text-muted-foreground font-mono">AI Intent Score</span>
-                                    <div className="text-sm font-bold text-emerald-600 font-mono">{selectedLead.score}/100</div>
+                                    <span className="text-muted-foreground font-mono text-[11px] block uppercase">Win Confidence</span>
+                                    <div className="text-sm font-black text-indigo-600 font-mono">{selectedDeal.probability}</div>
                                 </div>
                             </div>
 
-                            <div className="space-y-2">
-                                <h4 className="font-bold text-foreground uppercase tracking-wider text-[10px] text-muted-foreground">Account Telemetry</h4>
-                                <div className="grid grid-cols-2 gap-2 text-xs">
-                                    <div className="p-2.5 border border-border rounded-lg bg-card">
+                            <div className="space-y-3">
+                                <h4 className="font-bold text-foreground uppercase tracking-wider text-[11px] text-muted-foreground">Opportunity Telemetry</h4>
+                                <div className="grid grid-cols-2 gap-3 text-xs">
+                                    <div className="p-3 border border-border rounded-xl bg-card">
                                         <span className="text-muted-foreground text-[10px] block">Primary Contact</span>
-                                        <span className="font-semibold text-foreground">{selectedLead.contact}</span>
+                                        <span className="font-bold text-foreground">{selectedDeal.contact}</span>
                                     </div>
-                                    <div className="p-2.5 border border-border rounded-lg bg-card">
+                                    <div className="p-3 border border-border rounded-xl bg-card">
                                         <span className="text-muted-foreground text-[10px] block">Pipeline Stage</span>
-                                        <span className="font-semibold text-foreground">{selectedLead.stage}</span>
+                                        <span className="font-bold text-foreground">{selectedDeal.stage}</span>
                                     </div>
                                 </div>
                             </div>
 
-                            <div className="space-y-2">
-                                <h4 className="font-bold text-foreground uppercase tracking-wider text-[10px] text-muted-foreground">Recent Activity History</h4>
-                                <div className="space-y-2">
-                                    <div className="p-2.5 border border-border/80 rounded-lg text-xs bg-muted/20 flex gap-2">
-                                        <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
-                                        <div>
-                                            <span className="font-semibold text-foreground">Executive Demo Completed</span>
-                                            <p className="text-muted-foreground text-[11px]">Met with VP of Engineering. Technical requirements approved.</p>
-                                        </div>
-                                    </div>
+                            <div className="space-y-3">
+                                <h4 className="font-bold text-foreground uppercase tracking-wider text-[11px] text-muted-foreground">Created Date</h4>
+                                <div className="p-3 border border-border rounded-xl bg-card font-mono font-semibold text-foreground">
+                                    {selectedDeal.created_at}
                                 </div>
                             </div>
                         </div>
                     )}
                 </SlideOverDrawer>
+
             </div>
         </AppLayout>
     );

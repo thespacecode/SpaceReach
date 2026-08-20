@@ -155,7 +155,7 @@ export default function InstallWizard({ requirements, permissions, defaultAppUrl
                             <h1 className="text-xl font-bold text-white tracking-tight flex items-center gap-2">
                                 SpaceReach <span className="text-xs px-2 py-0.5 rounded-full bg-blue-500/10 text-blue-400 border border-blue-500/20 font-medium">Portal Installer</span>
                             </h1>
-                            <p className="text-xs text-slate-400">Automated Server Setup & Database Configuration</p>
+                            <p className="text-xs text-slate-400">Automated Server Setup by <a href="https://thespacecode.com" target="_blank" rel="noopener noreferrer" className="text-blue-400 hover:underline font-semibold">thespacecode.com</a></p>
                         </div>
                     </div>
                     

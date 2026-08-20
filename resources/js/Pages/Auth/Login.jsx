@@ -202,8 +202,17 @@ export default function Login({ status }) {
                 </div>
 
                 {/* Footer copyright */}
-                <div className="mt-6 text-center text-xs text-muted-foreground/70 font-medium">
-                    © {new Date().getFullYear()} {companyName}. All rights reserved.
+                <div className="mt-6 text-center text-xs text-muted-foreground/70 font-medium flex flex-wrap items-center justify-center gap-1">
+                    <span>© {new Date().getFullYear()} {companyName}. Built & Powered by</span>
+                    <a 
+                        href="https://thespacecode.com" 
+                        target="_blank" 
+                        rel="noopener noreferrer" 
+                        className="text-indigo-600 dark:text-indigo-400 hover:underline font-bold"
+                    >
+                        thespacecode.com
+                    </a>
+                    <span>. All rights reserved.</span>
                 </div>
             </div>
         </>

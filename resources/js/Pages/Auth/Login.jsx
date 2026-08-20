@@ -71,10 +71,10 @@ export default function Login({ status }) {
                     );
                 })}
 
-                {/* Main Centered Login Card Container (Increased Height & Spacious Padding) */}
-                <div className="w-full max-w-lg min-h-[580px] bg-card/95 backdrop-blur-md rounded-3xl p-10 sm:p-14 flex flex-col justify-between space-y-8 relative z-10 transition-all">
+                {/* Main Centered Login Card Container */}
+                <div className="w-full max-w-md bg-card/95 backdrop-blur-md rounded-3xl p-8 sm:p-10 space-y-5 relative z-10 transition-all">
                     {/* Header */}
-                    <div className="text-center space-y-2 flex flex-col items-center">
+                    <div className="text-center space-y-1 flex flex-col items-center">
                         <h1 className="text-3xl font-medium text-foreground tracking-normal">
                             Space Reach
                         </h1>

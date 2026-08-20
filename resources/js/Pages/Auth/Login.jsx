@@ -32,10 +32,10 @@ export default function Login({ status }) {
                 <div className="absolute -bottom-40 -right-40 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl pointer-events-none" />
 
                 {/* Main Centered Login Card Container */}
-                <div className="w-full max-w-md bg-card/95 backdrop-blur-md border border-border/80 shadow-2xl rounded-3xl p-6 sm:p-8 space-y-6 relative z-10 transition-all">
+                <div className="w-full max-w-md bg-card/95 backdrop-blur-md border border-border/80 rounded-3xl p-6 sm:p-8 space-y-6 relative z-10 transition-all">
                     {/* Header & Logo */}
                     <div className="text-center space-y-2">
-                        <div className="inline-flex items-center justify-center w-12 h-12 rounded-2xl bg-indigo-600/10 dark:bg-indigo-500/20 text-indigo-600 dark:text-indigo-400 mb-1 border border-indigo-200 dark:border-indigo-800 shadow-2xs">
+                        <div className="inline-flex items-center justify-center w-12 h-12 rounded-2xl bg-indigo-600/10 dark:bg-indigo-500/20 text-indigo-600 dark:text-indigo-400 mb-1 border border-indigo-200 dark:border-indigo-800">
                             {logoUrl ? (
                                 <img src={logoUrl} alt={companyName} className="w-7 h-7 object-contain rounded-lg" />
                             ) : (
@@ -139,7 +139,7 @@ export default function Login({ status }) {
                         <Button
                             type="submit"
                             disabled={processing}
-                            className="w-full h-10 font-extrabold text-xs bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl shadow-md cursor-pointer transition-all gap-2"
+                            className="w-full h-10 font-extrabold text-xs bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl cursor-pointer transition-all gap-2"
                         >
                             {processing ? (
                                 <>

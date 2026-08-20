@@ -62,9 +62,9 @@ Route::post('/check-email', function (\Illuminate\Http\Request $request) {
     ]);
 })->withoutMiddleware([\Illuminate\Foundation\Http\Middleware\PreventRequestForgery::class])->middleware('throttle:30,1')->name('check-email');
 
-// Redirect root to login or dashboard
+// Redirect root to login or leads
 Route::get('/', function () {
-    return auth()->check() ? redirect('/dashboard') : redirect('/login');
+    return auth()->check() ? redirect('/leads') : redirect('/login');
 });
 
 // Authenticated routes

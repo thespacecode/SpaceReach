@@ -20,7 +20,7 @@ class InstallController extends Controller
     {
         $isInstalled = file_exists(storage_path('.installed')) || 
                       file_exists(base_path('.installed')) || 
-                      (env('APP_INSTALLED', false) && !empty(env('APP_KEY')));
+                      config('app.installed', false);
 
         if ($isInstalled) {
             abort(403, 'Portal is already installed. Setup wizard is locked for security.');

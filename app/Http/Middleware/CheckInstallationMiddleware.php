@@ -12,7 +12,7 @@ class CheckInstallationMiddleware
     {
         $isInstalled = file_exists(storage_path('.installed')) || 
                       file_exists(base_path('.installed')) || 
-                      (env('APP_INSTALLED', false) && !empty(env('APP_KEY')));
+                      config('app.installed', false);
 
         $isInstallRoute = $request->is('install*');
 
@@ -21,7 +21,7 @@ class CheckInstallationMiddleware
         }
 
         if ($isInstalled && $isInstallRoute) {
-            return redirect()->route('dashboard');
+            return redirect('/leads');
         }
 
         return $next($request);

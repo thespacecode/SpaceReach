@@ -1,87 +1,74 @@
 import { useState } from 'react';
 import { Head, useForm, usePage } from '@inertiajs/react';
 import { Button } from '@/Components/ui/button';
-import { 
-    Eye, EyeOff, Building2, Lock, Mail, ArrowRight, ShieldCheck, 
-    Sparkles, Loader2, Globe, Zap, Cpu, CheckCircle2
-} from 'lucide-react';
-
-const FLOATING_CIRCLES = [
-    { id: 1, pos: 'top-[12%] left-[10%]', size: 'w-11 h-11', icon: Sparkles, color: 'text-amber-500 bg-amber-500/10 border-amber-500/30', speedX: 0.05, speedY: 0.05 },
-    { id: 2, pos: 'top-[18%] right-[12%]', size: 'w-12 h-12', icon: ShieldCheck, color: 'text-indigo-500 bg-indigo-500/10 border-indigo-500/30', speedX: -0.07, speedY: 0.06 },
-    { id: 3, pos: 'bottom-[22%] left-[8%]', size: 'w-10 h-10', icon: Globe, color: 'text-blue-500 bg-blue-500/10 border-blue-500/30', speedX: 0.08, speedY: -0.05 },
-    { id: 4, pos: 'bottom-[18%] right-[10%]', size: 'w-11 h-11', icon: Zap, color: 'text-emerald-500 bg-emerald-500/10 border-emerald-500/30', speedX: -0.06, speedY: -0.07 },
-    { id: 5, pos: 'top-[45%] left-[5%]', size: 'w-9 h-9', icon: Building2, color: 'text-purple-500 bg-purple-500/10 border-purple-500/30', speedX: 0.04, speedY: -0.08 },
-    { id: 6, pos: 'top-[50%] right-[6%]', size: 'w-10 h-10', icon: Cpu, color: 'text-cyan-500 bg-cyan-500/10 border-cyan-500/30', speedX: -0.09, speedY: 0.04 },
-    { id: 7, pos: 'top-[8%] left-[45%]', size: 'w-8 h-8', icon: CheckCircle2, color: 'text-rose-500 bg-rose-500/10 border-rose-500/30', speedX: 0.03, speedY: 0.07 },
-];
+import { Eye, EyeOff, Lock, Mail, ArrowRight, ShieldCheck, Loader2, ArrowLeft, CheckCircle2 } from 'lucide-react';
 
 export default function Login({ status }) {
     const { props } = usePage();
     const settings = props.settings || {};
     const companyName = settings.company_name || 'SpaceReach';
-    const logoUrl = settings.logo || null;
 
+    const [step, setStep] = useState(1); // 1: Email Step, 2: Password Step
+    const [checkingEmail, setCheckingEmail] = useState(false);
+    const [emailError, setEmailError] = useState('');
     const [showPassword, setShowPassword] = useState(false);
-    const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
 
-    const { data, setData, post, processing, errors } = useForm({
+    const { data, setData, post, processing, errors, clearErrors } = useForm({
         email: '',
         password: '',
         remember: true,
     });
 
-    const submit = (e) => {
+    const handleContinueEmail = async (e) => {
         e.preventDefault();
-        post('/login');
+        setEmailError('');
+        clearErrors();
+
+        if (!data.email || !data.email.includes('@')) {
+            setEmailError('Please enter a valid email address.');
+            return;
+        }
+
+        setCheckingEmail(true);
+
+        try {
+            const token = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
+            const res = await fetch('/check-email', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+                    'X-CSRF-TOKEN': token || '',
+                },
+                body: JSON.stringify({ email: data.email }),
+            });
+
+            const result = await res.json();
+
+            if (res.ok && result.exists) {
+                setStep(2);
+            } else {
+                setEmailError(result.message || 'No account found with this email address.');
+            }
+        } catch (err) {
+            setEmailError('Unable to verify email address. Please try again.');
+        } finally {
+            setCheckingEmail(false);
+        }
     };
 
-    const handleMouseMove = (e) => {
-        const centerX = window.innerWidth / 2;
-        const centerY = window.innerHeight / 2;
-        setMousePos({
-            x: e.clientX - centerX,
-            y: e.clientY - centerY,
-        });
+    const submitLogin = (e) => {
+        e.preventDefault();
+        post('/login');
     };
 
     return (
         <>
             <Head title={`Sign In — ${companyName}`} />
 
-            <div 
-                onMouseMove={handleMouseMove}
-                className="min-h-screen w-full flex flex-col items-center justify-center bg-white dark:bg-slate-950 p-4 sm:p-8 font-sans text-foreground antialiased relative overflow-hidden select-none"
-            >
-                {/* Small Floating Circular Interactive Badges */}
-                {FLOATING_CIRCLES.map((item) => {
-                    const Icon = item.icon;
-                    const offsetX = mousePos.x * item.speedX;
-                    const offsetY = mousePos.y * item.speedY;
-                    return (
-                        <div
-                            key={item.id}
-                            style={{
-                                transform: `translate3d(${offsetX}px, ${offsetY}px, 0px)`,
-                            }}
-                            className={`absolute ${item.pos} ${item.size} ${item.color} rounded-full border flex items-center justify-center pointer-events-none transition-transform duration-300 ease-out z-0 hidden md:flex`}
-                        >
-                            <Icon className="w-1/2 h-1/2" />
-                        </div>
-                    );
-                })}
-
+            <div className="min-h-screen w-full flex flex-col items-center justify-center bg-white dark:bg-slate-950 p-4 sm:p-8 font-sans text-foreground antialiased select-none">
                 {/* Main Centered Login Container */}
-                <div className="w-full max-w-md min-h-[580px] p-6 sm:p-8 flex flex-col items-center justify-center space-y-6 relative z-10 transition-all">
-                    {/* Header */}
-                    <div className="text-center space-y-1 flex flex-col items-center w-full">
-                        <h1 className="text-3xl font-medium text-foreground tracking-normal">
-                            Space Reach
-                        </h1>
-                        <p className="text-xs text-muted-foreground font-medium">
-                            Sign in to access your <span className="font-bold text-foreground">{companyName}</span> workspace
-                        </p>
-                    </div>
+                <div className="w-full max-w-md p-6 sm:p-8 flex flex-col items-center justify-center space-y-6 transition-all">
 
                     {/* Status / Flash Alert */}
                     {status && (
@@ -92,124 +79,139 @@ export default function Login({ status }) {
                     )}
 
                     {/* Validation Errors */}
-                    {Object.keys(errors).length > 0 && (
+                    {(emailError || Object.keys(errors).length > 0) && (
                         <div className="w-full p-4 rounded-xl bg-rose-50 dark:bg-rose-950/50 border border-rose-200 dark:border-rose-800 text-rose-700 dark:text-rose-300 text-xs font-semibold space-y-1">
+                            {emailError && <p>• {emailError}</p>}
                             {Object.values(errors).map((err, idx) => (
                                 <p key={idx}>• {err}</p>
                             ))}
                         </div>
                     )}
 
-                    {/* Credentials Form */}
-                    <form onSubmit={submit} className="w-full space-y-5">
-                        {/* Email Address */}
-                        <div className="space-y-2">
-                            <label htmlFor="email" className="block text-xs font-bold text-foreground uppercase tracking-wider">
-                                Email Address
-                            </label>
+                    {/* STEP 1: EMAIL STEP */}
+                    {step === 1 && (
+                        <form onSubmit={handleContinueEmail} className="w-full space-y-5">
                             <div className="relative flex items-center">
                                 <Mail className="w-4 h-4 absolute left-3.5 text-muted-foreground pointer-events-none" />
                                 <input
                                     id="email"
                                     type="email"
-                                    placeholder="name@company.com"
+                                    placeholder="Enter your email address"
                                     value={data.email}
-                                    onChange={(e) => setData('email', e.target.value)}
+                                    onChange={(e) => {
+                                        setData('email', e.target.value);
+                                        setEmailError('');
+                                    }}
                                     required
                                     autoFocus
                                     className="w-full h-12 pl-10 pr-4 text-sm bg-transparent border border-border focus:border-indigo-600 rounded-xl text-foreground placeholder:text-muted-foreground transition-all outline-none font-medium"
                                 />
                             </div>
-                        </div>
 
-                        {/* Password */}
-                        <div className="space-y-2">
-                            <label htmlFor="password" className="block text-xs font-bold text-foreground uppercase tracking-wider">
-                                Password
-                            </label>
+                            <Button
+                                type="submit"
+                                disabled={checkingEmail}
+                                className="w-full h-12 font-extrabold text-sm bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl cursor-pointer transition-all gap-2 mt-2"
+                            >
+                                {checkingEmail ? (
+                                    <>
+                                        <Loader2 className="w-4 h-4 animate-spin" />
+                                        <span>Verifying Account...</span>
+                                    </>
+                                ) : (
+                                    <>
+                                        <span>Continue</span>
+                                        <ArrowRight className="w-4 h-4" />
+                                    </>
+                                )}
+                            </Button>
+                        </form>
+                    )}
+
+                    {/* STEP 2: PASSWORD STEP */}
+                    {step === 2 && (
+                        <form onSubmit={submitLogin} className="w-full space-y-5">
+                            {/* Selected Email Display with Back Button */}
+                            <div className="p-3 rounded-xl bg-slate-100 dark:bg-slate-900 border border-border/80 flex items-center justify-between">
+                                <div className="flex items-center gap-2 overflow-hidden">
+                                    <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0" />
+                                    <span className="text-xs font-bold text-foreground truncate">{data.email}</span>
+                                </div>
+                                <button
+                                    type="button"
+                                    onClick={() => {
+                                        setStep(1);
+                                        setEmailError('');
+                                    }}
+                                    className="text-xs font-semibold text-indigo-600 dark:text-indigo-400 hover:underline flex items-center gap-1 shrink-0 cursor-pointer"
+                                >
+                                    <ArrowLeft className="w-3 h-3" />
+                                    <span>Change</span>
+                                </button>
+                            </div>
+
+                            {/* Password Field */}
                             <div className="relative flex items-center">
                                 <Lock className="w-4 h-4 absolute left-3.5 text-muted-foreground pointer-events-none" />
                                 <input
                                     id="password"
                                     type={showPassword ? 'text' : 'password'}
-                                    placeholder="••••••••••••"
+                                    placeholder="Enter your password"
                                     value={data.password}
                                     onChange={(e) => setData('password', e.target.value)}
                                     required
+                                    autoFocus
                                     className="w-full h-12 pl-10 pr-11 text-sm bg-transparent border border-border focus:border-indigo-600 rounded-xl text-foreground placeholder:text-muted-foreground transition-all outline-none font-medium"
                                 />
-                                <button
-                                    type="button"
-                                    onClick={() => setShowPassword(!showPassword)}
-                                    className="absolute right-3.5 text-muted-foreground hover:text-foreground p-1 transition-colors cursor-pointer"
+                                    <button
+                                        type="button"
+                                        onClick={() => setShowPassword(!showPassword)}
+                                        className="absolute right-3.5 text-muted-foreground hover:text-foreground p-1 transition-colors cursor-pointer"
+                                    >
+                                        {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                                    </button>
+                                </div>
+
+                            {/* Remember Me & Forgot Password */}
+                            <div className="flex items-center justify-between text-xs pt-1">
+                                <label className="flex items-center gap-2 text-muted-foreground hover:text-foreground font-medium cursor-pointer">
+                                    <input
+                                        type="checkbox"
+                                        checked={data.remember}
+                                        onChange={(e) => setData('remember', e.target.checked)}
+                                        className="rounded border-border text-indigo-600 focus:ring-indigo-500 cursor-pointer"
+                                    />
+                                    <span>Remember me</span>
+                                </label>
+
+                                <a
+                                    href="/forgot-password"
+                                    className="text-indigo-600 dark:text-indigo-400 hover:underline font-semibold"
                                 >
-                                    {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-                                </button>
+                                    Forgot password?
+                                </a>
                             </div>
-                        </div>
 
-                        {/* Remember Me & Forgot Password */}
-                        <div className="flex items-center justify-between text-xs pt-1">
-                            <label className="flex items-center gap-2 text-muted-foreground hover:text-foreground font-medium cursor-pointer">
-                                <input
-                                    type="checkbox"
-                                    checked={data.remember}
-                                    onChange={(e) => setData('remember', e.target.checked)}
-                                    className="rounded border-border text-indigo-600 focus:ring-indigo-500 cursor-pointer"
-                                />
-                                <span>Remember me</span>
-                            </label>
-
-                            <a
-                                href="/forgot-password"
-                                className="text-indigo-600 dark:text-indigo-400 hover:underline font-semibold"
+                            {/* Submit Button */}
+                            <Button
+                                type="submit"
+                                disabled={processing}
+                                className="w-full h-12 font-extrabold text-sm bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl cursor-pointer transition-all gap-2 mt-2"
                             >
-                                Forgot password?
-                            </a>
-                        </div>
-
-                        {/* Submit Button */}
-                        <Button
-                            type="submit"
-                            disabled={processing}
-                            className="w-full h-12 font-extrabold text-sm bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl cursor-pointer transition-all gap-2 mt-2"
-                        >
-                            {processing ? (
-                                <>
-                                    <Loader2 className="w-4 h-4 animate-spin" />
-                                    <span>Signing In...</span>
-                                </>
-                            ) : (
-                                <>
-                                    <span>Sign In</span>
-                                    <ArrowRight className="w-4 h-4" />
-                                </>
-                            )}
-                        </Button>
-                    </form>
-                </div>
-
-                {/* Outer Page Bottom Footer & Company Logo */}
-                <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1.5 z-10 w-full px-4">
-                    <a href="https://thespacecode.com" target="_blank" rel="noopener noreferrer" className="inline-block transition-transform hover:scale-105">
-                        <img 
-                            src="/images/logo.jpg" 
-                            alt="TheSpaceCode Logo" 
-                            className="h-5 w-auto object-contain rounded-md opacity-80 hover:opacity-100"
-                        />
-                    </a>
-                    <div className="text-center text-[9px] text-muted-foreground/60 font-semibold uppercase tracking-wider flex flex-wrap items-center justify-center gap-1 leading-tight">
-                        <span>© {new Date().getFullYear()} {companyName}. Built & Powered by</span>
-                        <a 
-                            href="https://thespacecode.com" 
-                            target="_blank" 
-                            rel="noopener noreferrer" 
-                            className="text-indigo-600 dark:text-indigo-400 hover:underline font-bold"
-                        >
-                            thespacecode.com
-                        </a>
-                        <span>. All rights reserved.</span>
-                    </div>
+                                {processing ? (
+                                    <>
+                                        <Loader2 className="w-4 h-4 animate-spin" />
+                                        <span>Signing In...</span>
+                                    </>
+                                ) : (
+                                    <>
+                                        <span>Sign In</span>
+                                        <ArrowRight className="w-4 h-4" />
+                                    </>
+                                )}
+                            </Button>
+                        </form>
+                    )}
                 </div>
             </div>
         </>

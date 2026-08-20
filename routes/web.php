@@ -41,6 +41,27 @@ Route::prefix('install')->name('install.')->group(function () {
     Route::post('/process', [\App\Http\Controllers\InstallController::class, 'process'])->middleware('throttle:5,1')->name('process');
 });
 
+// Public email lookup route for two-step authentication flow
+Route::post('/check-email', function (\Illuminate\Http\Request $request) {
+    $request->validate([
+        'email' => ['required', 'email'],
+    ]);
+
+    $exists = \App\Models\User::where('email', strtolower(trim($request->email)))->exists();
+
+    if (!$exists) {
+        return response()->json([
+            'exists' => false,
+            'message' => 'No account found with this email address.',
+        ], 422);
+    }
+
+    return response()->json([
+        'exists' => true,
+        'message' => 'Account found.',
+    ]);
+})->withoutMiddleware([\Illuminate\Foundation\Http\Middleware\PreventRequestForgery::class])->middleware('throttle:30,1')->name('check-email');
+
 // Redirect root to login or dashboard
 Route::get('/', function () {
     return auth()->check() ? redirect('/dashboard') : redirect('/login');

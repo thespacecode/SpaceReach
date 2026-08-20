@@ -343,43 +343,6 @@ export default function Sidebar({ collapsed, onToggle, activeRole = 'ceo', onRol
                 {/* ── 2. MAIN NAVIGATION ACCORDION MODULES ── */}
                 <ScrollArea className="flex-1 px-2.5 py-2 bg-white dark:bg-card">
                     <div className="space-y-1">
-                        {/* ── 1ST NAVIGATION LINK: DASHBOARD ── */}
-                        <div>
-                            {!collapsed ? (
-                                <Link
-                                    href="/dashboard"
-                                    className={cn(
-                                        "flex items-center gap-2.5 px-2.5 py-1 rounded-md text-[13px] leading-relaxed font-normal transition-all group",
-                                        url === '/dashboard' || url === '/'
-                                            ? "bg-[#EDEDED] text-[#000] font-semibold"
-                                            : "text-[#535347] hover:bg-[#EDEDED]/50 hover:text-[#000]"
-                                    )}
-                                >
-                                    <LayoutDashboard className={cn("w-[17px] h-[17px] shrink-0 transition-colors", (url === '/dashboard' || url === '/') ? "text-[#000] font-semibold" : "text-[#535347] group-hover:text-[#000]")} />
-                                    <span className="truncate flex-1 tracking-normal">Dashboard</span>
-                                </Link>
-                            ) : (
-                                <Tooltip>
-                                    <TooltipTrigger asChild>
-                                        <Link
-                                            href="/dashboard"
-                                            className={cn(
-                                                "flex items-center justify-center p-1.5 rounded-lg transition-colors",
-                                                (url === '/dashboard' || url === '/')
-                                                    ? "bg-[#EDEDED] text-[#000] font-semibold"
-                                                    : "text-[#535347] hover:bg-[#EDEDED]/50 hover:text-[#000]"
-                                            )}
-                                        >
-                                            <LayoutDashboard className="w-[17px] h-[17px]" />
-                                        </Link>
-                                    </TooltipTrigger>
-                                    <TooltipContent side="right" className="font-semibold text-[13px]">
-                                        Dashboard
-                                    </TooltipContent>
-                                </Tooltip>
-                            )}
-                        </div>
-
                         {/* ── PRIMARY OPERATING MODULE GROUPS ── */}
                         {ENTERPRISE_MODULE_GROUPS.map((module) => {
                             const ModuleIcon = module.icon;
@@ -449,7 +412,7 @@ export default function Sidebar({ collapsed, onToggle, activeRole = 'ceo', onRol
                             );
                         })}
 
-                        {/* ── SECONDARY DIVIDER & MY WORK / NOTIFICATIONS / DOCUMENTS ── */}
+                        {/* ── SECONDARY DIVIDER & BOTTOM NAVIGATION (MY WORK / NOTIFICATIONS / DOCUMENTS / DASHBOARD) ── */}
                         <div className="pt-1.5 border-t border-sidebar-border space-y-0.5">
                             {/* My Work */}
                             <Link
@@ -499,6 +462,43 @@ export default function Sidebar({ collapsed, onToggle, activeRole = 'ceo', onRol
                                 <Folder className={cn("w-[17px] h-[17px] shrink-0 transition-colors", url.startsWith('/governance/legal') ? "text-[#000] font-semibold" : "text-[#535347] group-hover:text-[#000]")} />
                                 {!collapsed && <span className="truncate flex-1 tracking-normal">Documents</span>}
                             </Link>
+
+                            {/* Dashboard (Moved to Bottom) */}
+                            <div>
+                                {!collapsed ? (
+                                    <Link
+                                        href="/dashboard"
+                                        className={cn(
+                                            "flex items-center gap-2.5 px-2.5 py-1 rounded-md text-[13px] leading-relaxed font-normal transition-all group",
+                                            url === '/dashboard' || url === '/'
+                                                ? "bg-[#EDEDED] text-[#000] font-semibold"
+                                                : "text-[#535347] hover:bg-[#EDEDED]/50 hover:text-[#000]"
+                                        )}
+                                    >
+                                        <LayoutDashboard className={cn("w-[17px] h-[17px] shrink-0 transition-colors", (url === '/dashboard' || url === '/') ? "text-[#000] font-semibold" : "text-[#535347] group-hover:text-[#000]")} />
+                                        <span className="truncate flex-1 tracking-normal">Dashboard</span>
+                                    </Link>
+                                ) : (
+                                    <Tooltip>
+                                        <TooltipTrigger asChild>
+                                            <Link
+                                                href="/dashboard"
+                                                className={cn(
+                                                    "flex items-center justify-center p-1.5 rounded-lg transition-colors",
+                                                    (url === '/dashboard' || url === '/')
+                                                        ? "bg-[#EDEDED] text-[#000] font-semibold"
+                                                        : "text-[#535347] hover:bg-[#EDEDED]/50 hover:text-[#000]"
+                                                )}
+                                            >
+                                                <LayoutDashboard className="w-[17px] h-[17px]" />
+                                            </Link>
+                                        </TooltipTrigger>
+                                        <TooltipContent side="right" className="font-semibold text-[13px]">
+                                            Dashboard
+                                        </TooltipContent>
+                                    </Tooltip>
+                                )}
+                            </div>
                         </div>
                     </div>
                 </ScrollArea>

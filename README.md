@@ -1,58 +1,129 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# SpaceReach 🚀
+> **Enterprise AI-Powered CRM, Lead Acquisition Engine, HR Management & Finance Platform**
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+SpaceReach is an all-in-one revenue acceleration, customer relationship, human resource, and financial management suite built for modern scaling teams. Powered by **Laravel 11**, **React 19**, **Inertia.js v2**, and **Tailwind CSS v4**, SpaceReach combines real-time lead prospecting, pipeline tracking, workforce management, and automated customer engagement into a unified platform.
 
-## About Laravel
+---
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## 🌟 Key Features
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+### 🎯 1. Prospect & Lead Acquisition Engine
+- **Master Lead Sheets**: Centralized database to view, filter, import, export, and manage leads in real-time.
+- **Scraper & Tech Detector**: Automated extraction of company tech stacks, domain data, and qualification scoring.
+- **Deduplication & Qualification Engine**: Prevents redundant lead imports and auto-scores leads based on customized ideal customer profiles (ICP).
+- **Website Opportunity Analyzer**: Identifies website performance, design gaps, and optimization opportunities to personalize sales outreach.
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+### 💼 2. Opportunity & Deal Pipeline (CRM)
+- **Visual Kanban & Pipeline**: Move deals seamlessly across custom sales stages.
+- **Client & Contact Management**: Detailed contact profiles, activity timelines, interaction histories, and notes.
+- **Proposals & Quotes Engine**: Create, send, and export quotes and commercial proposals directly to PDF.
 
-## Learning Laravel
+### 👥 3. HR Management & Workforce Operations
+- **Employee Directory & Groups**: Department organization, designations, and team structures.
+- **Leave & Attendance Tracking**: Flexible leave requests, manager approval flows, and quota management.
+- **OKRs & Key Results**: Goal setting, progress tracking, and key performance alignment.
+- **Peer Reviews & Performance**: Multi-rater peer feedback and performance evaluation workflows.
+- **Recognition & Rewards**: Peer-to-peer appreciation and reward points distribution.
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+### 💰 4. Finance & Revenue Intelligence
+- **Invoice Management**: Generate branded PDF invoices with itemized pricing and automated tax calculations.
+- **Payment Gateway & Tracking**: Record incoming payments, track outstanding balances, and monitor cash flow.
+- **Financial Analytics & Reporting**: Real-time revenue reports, payment distributions, and forecasting dashboards.
 
-In addition, [Laracasts](https://laracasts.com) contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+### 🤖 5. Automated AI Chatbot Suite
+- **Interactive Chatbot Widget**: Lightweight, customizable embeddable widget for instant customer engagement.
+- **Knowledge Base & Synonyms**: Automated query matching, entity recognition, and synonym mapping.
+- **Unanswered Query Logger**: Auto-captures unrecognized user questions for rapid knowledge base enrichment.
 
-You can also watch bite-sized lessons with real-world projects on [Laravel Learn](https://laravel.com/learn), where you will be guided through building a Laravel application from scratch while learning PHP fundamentals.
+### 🔐 6. Enterprise Security & Administration
+- **Role-Based Access Control (RBAC)**: Fine-grained permissions via `spatie/laravel-permission`.
+- **Comprehensive Audit Logs**: Every critical action, edit, and deletion is recorded with IP and timestamp.
+- **Two-Factor Authentication (2FA) & Passkeys**: Advanced user security powered by Laravel Fortify.
 
-## Agentic Development
+---
 
-Laravel's predictable structure and conventions make it ideal for AI coding agents like Claude Code, Cursor, and GitHub Copilot. Install [Laravel Boost](https://laravel.com/docs/ai) to supercharge your AI workflow:
+## 🛠️ Technology Stack
 
-```bash
-composer require laravel/boost --dev
+| Layer | Technology |
+| :--- | :--- |
+| **Backend Framework** | Laravel 11.x (PHP 8.2+) |
+| **Frontend Framework** | React 19 + Inertia.js v2 |
+| **Styling & UI** | Tailwind CSS v4 + Radix UI + Lucide Icons |
+| **Build Tooling** | Vite 6 |
+| **Database** | SQLite / MySQL / PostgreSQL |
+| **PDF Generation** | `barryvdh/laravel-dompdf` |
+| **Authentication & RBAC** | Laravel Fortify + Spatie Laravel Permission |
+| **Continuous Integration** | GitHub Actions (`.github/workflows/ci.yml`) |
 
-php artisan boost:install
-```
+---
 
-Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
+## 🚀 Quick Start & Installation
 
-## Contributing
+### Prerequisites
+- PHP `>= 8.2`
+- Composer `>= 2.x`
+- Node.js `>= 20.x` & npm
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+### Setup Instructions
 
-## Code of Conduct
+1. **Clone the Repository**
+   ```bash
+   git clone git@github.com:thespacecode/SpaceReach.git SpaceReach
+   cd SpaceReach
+   ```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+2. **Install PHP Dependencies**
+   ```bash
+   composer install
+   ```
 
-## Security Vulnerabilities
+3. **Install Frontend Dependencies**
+   ```bash
+   npm install
+   ```
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+4. **Configure Environment**
+   ```bash
+   cp .env.example .env
+   php artisan key:generate
+   ```
 
-## License
+5. **Run Migrations & Seeders**
+   ```bash
+   php artisan migrate --seed
+   ```
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+6. **Build Frontend & Start Development Servers**
+   ```bash
+   # Build assets for production
+   npm run build
+
+   # Start local development server
+   php artisan serve
+   # (In a second terminal window)
+   npm run dev
+   ```
+
+---
+
+## 🧪 Testing & CI Pipeline
+
+SpaceReach includes automated quality checks and continuous integration powered by GitHub Actions.
+
+- **Run PHP Unit & Feature Tests**:
+  ```bash
+  php artisan test
+  ```
+
+- **Run PHP Syntax Linting**:
+  ```bash
+  find app config database routes tests -name "*.php" -exec php -l {} \;
+  ```
+
+- **GitHub Actions Workflow**: Automatically runs syntax linting, PHPUnit tests, and production Vite asset builds on every push to `main`.
+
+---
+
+## 📜 License
+
+SpaceReach is proprietary software built and maintained by **The Space Code**. All rights reserved.

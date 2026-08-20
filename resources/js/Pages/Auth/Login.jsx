@@ -71,10 +71,10 @@ export default function Login({ status }) {
                     );
                 })}
 
-                {/* Main Centered Login Card Container */}
-                <div className="w-full max-w-md bg-card/95 backdrop-blur-md rounded-3xl p-8 sm:p-10 space-y-5 relative z-10 transition-all">
+                {/* Main Centered Login Card Container (Tall Height with Center Center Content Alignment) */}
+                <div className="w-full max-w-md min-h-[580px] bg-card/95 backdrop-blur-md rounded-3xl p-10 sm:p-12 flex flex-col items-center justify-center space-y-6 relative z-10 transition-all">
                     {/* Header */}
-                    <div className="text-center space-y-1 flex flex-col items-center">
+                    <div className="text-center space-y-1 flex flex-col items-center w-full">
                         <h1 className="text-3xl font-medium text-foreground tracking-normal">
                             Space Reach
                         </h1>
@@ -85,7 +85,7 @@ export default function Login({ status }) {
 
                     {/* Status / Flash Alert */}
                     {status && (
-                        <div className="p-3.5 rounded-xl bg-emerald-50 dark:bg-emerald-950/50 border border-emerald-200 dark:border-emerald-800 text-emerald-700 dark:text-emerald-300 text-xs font-semibold text-center flex items-center justify-center gap-2">
+                        <div className="w-full p-3.5 rounded-xl bg-emerald-50 dark:bg-emerald-950/50 border border-emerald-200 dark:border-emerald-800 text-emerald-700 dark:text-emerald-300 text-xs font-semibold text-center flex items-center justify-center gap-2">
                             <ShieldCheck className="w-4 h-4 text-emerald-500 shrink-0" />
                             <span>{status}</span>
                         </div>
@@ -93,7 +93,7 @@ export default function Login({ status }) {
 
                     {/* Validation Errors */}
                     {Object.keys(errors).length > 0 && (
-                        <div className="p-4 rounded-xl bg-rose-50 dark:bg-rose-950/50 border border-rose-200 dark:border-rose-800 text-rose-700 dark:text-rose-300 text-xs font-semibold space-y-1">
+                        <div className="w-full p-4 rounded-xl bg-rose-50 dark:bg-rose-950/50 border border-rose-200 dark:border-rose-800 text-rose-700 dark:text-rose-300 text-xs font-semibold space-y-1">
                             {Object.values(errors).map((err, idx) => (
                                 <p key={idx}>• {err}</p>
                             ))}
@@ -101,7 +101,7 @@ export default function Login({ status }) {
                     )}
 
                     {/* Credentials Form (Increased Input & Button Height) */}
-                    <form onSubmit={submit} className="space-y-5">
+                    <form onSubmit={submit} className="w-full space-y-5">
                         {/* Email Address */}
                         <div className="space-y-2">
                             <label htmlFor="email" className="block text-xs font-bold text-foreground uppercase tracking-wider">

@@ -73,16 +73,9 @@ export default function Login({ status }) {
 
                 {/* Main Centered Login Card Container (Increased Height & Spacious Padding) */}
                 <div className="w-full max-w-lg min-h-[580px] bg-card/95 backdrop-blur-md rounded-3xl p-10 sm:p-14 flex flex-col justify-between space-y-8 relative z-10 transition-all">
-                    {/* Header & Logo */}
+                    {/* Header */}
                     <div className="text-center space-y-2 flex flex-col items-center">
-                        <a href="https://thespacecode.com" target="_blank" rel="noopener noreferrer" className="inline-block transition-transform hover:scale-105">
-                            <img 
-                                src="/images/logo.jpg" 
-                                alt="TheSpaceCode Logo" 
-                                className="h-10 w-auto object-contain rounded-xl"
-                            />
-                        </a>
-                        <h1 className="text-2xl font-extrabold text-foreground tracking-tight pt-1">
+                        <h1 className="text-3xl font-extrabold text-foreground tracking-tight">
                             SpaceReach
                         </h1>
                         <p className="text-xs text-muted-foreground font-medium">
@@ -195,18 +188,27 @@ export default function Login({ status }) {
                         </Button>
                     </form>
 
-                    {/* Footer copyright */}
-                    <div className="pt-2 text-center text-xs text-muted-foreground/70 font-medium flex flex-wrap items-center justify-center gap-1">
-                        <span>© {new Date().getFullYear()} {companyName}. Built & Powered by</span>
-                        <a 
-                            href="https://thespacecode.com" 
-                            target="_blank" 
-                            rel="noopener noreferrer" 
-                            className="text-indigo-600 dark:text-indigo-400 hover:underline font-bold"
-                        >
-                            thespacecode.com
+                    {/* Footer Logo & Copyright */}
+                    <div className="pt-2 flex flex-col items-center gap-2">
+                        <a href="https://thespacecode.com" target="_blank" rel="noopener noreferrer" className="inline-block transition-transform hover:scale-105">
+                            <img 
+                                src="/images/logo.jpg" 
+                                alt="TheSpaceCode Logo" 
+                                className="h-7 w-auto object-contain rounded-lg"
+                            />
                         </a>
-                        <span>. All rights reserved.</span>
+                        <div className="text-center text-xs text-muted-foreground/70 font-medium flex flex-wrap items-center justify-center gap-1">
+                            <span>© {new Date().getFullYear()} {companyName}. Built & Powered by</span>
+                            <a 
+                                href="https://thespacecode.com" 
+                                target="_blank" 
+                                rel="noopener noreferrer" 
+                                className="text-indigo-600 dark:text-indigo-400 hover:underline font-bold"
+                            >
+                                thespacecode.com
+                            </a>
+                            <span>. All rights reserved.</span>
+                        </div>
                     </div>
                 </div>
             </div>

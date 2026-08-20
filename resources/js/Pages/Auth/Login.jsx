@@ -75,8 +75,8 @@ export default function Login({ status }) {
                 <div className="w-full max-w-lg min-h-[580px] bg-card/95 backdrop-blur-md rounded-3xl p-10 sm:p-14 flex flex-col justify-between space-y-8 relative z-10 transition-all">
                     {/* Header */}
                     <div className="text-center space-y-2 flex flex-col items-center">
-                        <h1 className="text-3xl font-medium text-foreground tracking-normal capitalize">
-                            Spacereach
+                        <h1 className="text-3xl font-medium text-foreground tracking-normal">
+                            Space Reach
                         </h1>
                         <p className="text-xs text-muted-foreground font-medium">
                             Sign in to access your <span className="font-bold text-foreground">{companyName}</span> workspace

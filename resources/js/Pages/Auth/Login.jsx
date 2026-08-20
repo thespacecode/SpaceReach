@@ -75,8 +75,8 @@ export default function Login({ status }) {
                 <div className="w-full max-w-lg min-h-[580px] bg-card/95 backdrop-blur-md rounded-3xl p-10 sm:p-14 flex flex-col justify-between space-y-8 relative z-10 transition-all">
                     {/* Header */}
                     <div className="text-center space-y-2 flex flex-col items-center">
-                        <h1 className="text-3xl font-extrabold text-foreground tracking-tight">
-                            SpaceReach
+                        <h1 className="text-3xl font-medium text-foreground tracking-normal capitalize">
+                            Spacereach
                         </h1>
                         <p className="text-xs text-muted-foreground font-medium">
                             Sign in to access your <span className="font-bold text-foreground">{companyName}</span> workspace
@@ -190,7 +190,7 @@ export default function Login({ status }) {
                 </div>
 
                 {/* Outer Page Bottom Footer & Company Logo */}
-                <div className="mt-8 flex flex-col items-center gap-1.5 relative z-10">
+                <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1.5 z-10 w-full px-4">
                     <a href="https://thespacecode.com" target="_blank" rel="noopener noreferrer" className="inline-block transition-transform hover:scale-105">
                         <img 
                             src="/images/logo.jpg" 

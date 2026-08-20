@@ -187,28 +187,28 @@ export default function Login({ status }) {
                             )}
                         </Button>
                     </form>
+                </div>
 
-                    {/* Footer Logo & Copyright */}
-                    <div className="pt-1 flex flex-col items-center gap-1.5">
-                        <a href="https://thespacecode.com" target="_blank" rel="noopener noreferrer" className="inline-block transition-transform hover:scale-105">
-                            <img 
-                                src="/images/logo.jpg" 
-                                alt="TheSpaceCode Logo" 
-                                className="h-5 w-auto object-contain rounded-md opacity-80 hover:opacity-100"
-                            />
+                {/* Outer Page Bottom Footer & Company Logo */}
+                <div className="mt-8 flex flex-col items-center gap-1.5 relative z-10">
+                    <a href="https://thespacecode.com" target="_blank" rel="noopener noreferrer" className="inline-block transition-transform hover:scale-105">
+                        <img 
+                            src="/images/logo.jpg" 
+                            alt="TheSpaceCode Logo" 
+                            className="h-5 w-auto object-contain rounded-md opacity-80 hover:opacity-100"
+                        />
+                    </a>
+                    <div className="text-center text-[10px] text-muted-foreground/60 font-medium flex flex-wrap items-center justify-center gap-1 leading-tight">
+                        <span>© {new Date().getFullYear()} {companyName}. Built & Powered by</span>
+                        <a 
+                            href="https://thespacecode.com" 
+                            target="_blank" 
+                            rel="noopener noreferrer" 
+                            className="text-indigo-600 dark:text-indigo-400 hover:underline font-semibold"
+                        >
+                            thespacecode.com
                         </a>
-                        <div className="text-center text-[10px] text-muted-foreground/60 font-medium flex flex-wrap items-center justify-center gap-1 leading-tight">
-                            <span>© {new Date().getFullYear()} {companyName}. Built & Powered by</span>
-                            <a 
-                                href="https://thespacecode.com" 
-                                target="_blank" 
-                                rel="noopener noreferrer" 
-                                className="text-indigo-600 dark:text-indigo-400 hover:underline font-semibold"
-                            >
-                                thespacecode.com
-                            </a>
-                            <span>. All rights reserved.</span>
-                        </div>
+                        <span>. All rights reserved.</span>
                     </div>
                 </div>
             </div>

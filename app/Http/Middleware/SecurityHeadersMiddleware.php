@@ -33,13 +33,18 @@ class SecurityHeadersMiddleware
             $response->headers->set('Strict-Transport-Security', 'max-age=31536000; includeSubDomains; preload');
         }
 
+        // Allow Vite HMR (IPv4 & IPv6), Google Tag Manager, and Fonts
+        $isDev = config('app.debug') || app()->environment('local');
+        $viteOrigins = $isDev ? "http://localhost:* http://127.0.0.1:* http://[::1]:* ws://localhost:* ws://127.0.0.1:* ws://[::1]:*" : "";
+
         // Content Security Policy
-        $csp = "default-src 'self'; " .
-               "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com; " .
-               "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; " .
-               "font-src 'self' https://fonts.gstatic.com data:; " .
-               "img-src 'self' data: https: blob:; " .
-               "connect-src 'self' https: wss:; " .
+        $csp = "default-src 'self' https: {$viteOrigins}; " .
+               "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://www.googletagmanager.com {$viteOrigins}; " .
+               "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com {$viteOrigins}; " .
+               "font-src 'self' https://fonts.gstatic.com data: {$viteOrigins}; " .
+               "img-src 'self' data: https: blob: {$viteOrigins}; " .
+               "connect-src 'self' https: wss: ws: {$viteOrigins}; " .
+               "frame-src 'self' https://www.googletagmanager.com; " .
                "frame-ancestors 'self';";
         
         $response->headers->set('Content-Security-Policy', $csp);

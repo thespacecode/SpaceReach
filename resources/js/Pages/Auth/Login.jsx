@@ -27,9 +27,30 @@ export default function Login({ status }) {
             <Head title={`Sign In — ${companyName}`} />
 
             <div className="min-h-screen w-full flex flex-col items-center justify-center bg-slate-50 dark:bg-slate-950 p-4 sm:p-6 font-sans text-foreground antialiased relative overflow-hidden select-none">
-                {/* Subtle Background Aesthetic Accents */}
-                <div className="absolute -top-40 -left-40 w-96 h-96 bg-indigo-500/10 rounded-full blur-3xl pointer-events-none" />
-                <div className="absolute -bottom-40 -right-40 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl pointer-events-none" />
+                {/* Animated Background Glowing Blobs */}
+                <style>{`
+                    @keyframes blobFloat1 {
+                        0%, 100% { transform: translate(0px, 0px) scale(1); }
+                        33% { transform: translate(40px, -60px) scale(1.18); }
+                        66% { transform: translate(-30px, 30px) scale(0.92); }
+                    }
+                    @keyframes blobFloat2 {
+                        0%, 100% { transform: translate(0px, 0px) scale(1); }
+                        33% { transform: translate(-50px, 40px) scale(1.22); }
+                        66% { transform: translate(30px, -45px) scale(0.88); }
+                    }
+                    @keyframes blobFloat3 {
+                        0%, 100% { transform: translate(0px, 0px) scale(1); }
+                        50% { transform: translate(45px, 45px) scale(1.12); }
+                    }
+                    .animate-blob-1 { animation: blobFloat1 14s infinite ease-in-out; }
+                    .animate-blob-2 { animation: blobFloat2 16s infinite ease-in-out 2s; }
+                    .animate-blob-3 { animation: blobFloat3 12s infinite ease-in-out 4s; }
+                `}</style>
+
+                <div className="absolute -top-32 -left-32 w-[32rem] h-[32rem] bg-gradient-to-br from-indigo-500/25 via-purple-500/20 to-blue-600/20 rounded-full blur-3xl pointer-events-none animate-blob-1" />
+                <div className="absolute -bottom-32 -right-32 w-[36rem] h-[36rem] bg-gradient-to-tr from-blue-600/25 via-cyan-500/20 to-indigo-500/20 rounded-full blur-3xl pointer-events-none animate-blob-2" />
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[26rem] h-[26rem] bg-gradient-to-tr from-violet-600/15 via-indigo-500/15 to-pink-500/15 rounded-full blur-3xl pointer-events-none animate-blob-3" />
 
                 {/* Main Centered Login Card Container */}
                 <div className="w-full max-w-md bg-card/95 backdrop-blur-md rounded-3xl p-10 sm:p-12 space-y-6 relative z-10 transition-all">

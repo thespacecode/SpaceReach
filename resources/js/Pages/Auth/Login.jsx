@@ -74,18 +74,15 @@ export default function Login({ status }) {
                 {/* Main Centered Login Card Container (Increased Height & Spacious Padding) */}
                 <div className="w-full max-w-lg min-h-[580px] bg-card/95 backdrop-blur-md rounded-3xl p-10 sm:p-14 flex flex-col justify-between space-y-8 relative z-10 transition-all">
                     {/* Header & Logo */}
-                    <div className="text-center space-y-3">
-                        <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-indigo-600/10 dark:bg-indigo-500/20 text-indigo-600 dark:text-indigo-400 mb-1">
-                            {logoUrl ? (
-                                <img src={logoUrl} alt={companyName} className="w-8 h-8 object-contain rounded-lg" />
-                            ) : (
-                                <Building2 className="w-7 h-7" />
-                            )}
-                        </div>
-                        <h1 className="text-3xl font-extrabold text-foreground tracking-tight">
-                            Welcome Back
-                        </h1>
-                        <p className="text-sm text-muted-foreground font-medium">
+                    <div className="text-center space-y-3 flex flex-col items-center">
+                        <a href="https://thespacecode.com" target="_blank" rel="noopener noreferrer" className="inline-block transition-transform hover:scale-105">
+                            <img 
+                                src="/images/logo.jpg" 
+                                alt="TheSpaceCode Logo" 
+                                className="h-10 w-auto object-contain rounded-xl"
+                            />
+                        </a>
+                        <p className="text-sm text-muted-foreground font-medium pt-1">
                             Sign in to access your <span className="font-bold text-foreground">{companyName}</span> workspace
                         </p>
                     </div>

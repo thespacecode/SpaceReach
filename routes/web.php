@@ -33,6 +33,14 @@ use App\Http\Controllers\Api\GlobalSearchController;
 |--------------------------------------------------------------------------
 */
 
+// Installation Setup Wizard Routes
+Route::prefix('install')->name('install.')->group(function () {
+    Route::get('/', [\App\Http\Controllers\InstallController::class, 'index'])->name('index');
+    Route::get('/check', [\App\Http\Controllers\InstallController::class, 'checkRequirements'])->name('check');
+    Route::post('/test-db', [\App\Http\Controllers\InstallController::class, 'testDatabase'])->name('test-db');
+    Route::post('/process', [\App\Http\Controllers\InstallController::class, 'process'])->name('process');
+});
+
 // Redirect root to login or dashboard
 Route::get('/', function () {
     return auth()->check() ? redirect('/dashboard') : redirect('/login');
